@@ -1,0 +1,310 @@
+{
+ "actions": [],
+ "creation": "2026-01-25 00:37:43.692921",
+ "description": "Configuraci\u00f3n general del m\u00f3dulo BrainFEL para Facturaci\u00f3n Electr\u00f3nica FEL.",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "configuracion_tab",
+  "enabled",
+  "certifier",
+  "user",
+  "contrase\u00f1a_certificador",
+  "timeout_ms",
+  "test_mode",
+  "generate_xml",
+  "generate_log",
+  "modify_alias",
+  "test_email",
+  "responsedata",
+  "datos_empresa_tab",
+  "company",
+  "company_nit",
+  "isr_regime",
+  "is_agent_retainer",
+  "correoemisor",
+  "nombrecomercial",
+  "nombreemisor",
+  "direccionemisor",
+  "codigopostalemisor",
+  "municipioemisor",
+  "departamentoemisor",
+  "paisemisor",
+  "receptor_email_default",
+  "licenciamiento_tab",
+  "license_url",
+  "license_token",
+  "client_code",
+  "urls_certificador_tab",
+  "base_url_test",
+  "base_url_prod",
+  "url_retorna_xml",
+  "url_token",
+  "url_validar",
+  "url_registrar",
+  "url_verificar",
+  "url_retorna_cliente",
+  "url_anular",
+  "url_ncred",
+  "url_firma",
+  "funciones_sql_tab",
+  "sql_func_certificar",
+  "sql_func_anular"
+ ],
+ "fields": [
+  {
+   "fieldname": "licenciamiento_tab",
+   "fieldtype": "Tab Break",
+   "label": "LICENCIAMIENTO"
+  },
+  {
+   "fieldname": "license_url",
+   "fieldtype": "Data",
+   "label": "License URL"
+  },
+  {
+   "fieldname": "license_token",
+   "fieldtype": "Data",
+   "label": "License Token"
+  },
+  {
+   "fieldname": "client_code",
+   "fieldtype": "Data",
+   "label": "Client Code"
+  },
+  {
+   "fieldname": "urls_certificador_tab",
+   "fieldtype": "Tab Break",
+   "label": "URLS CERTIFICADOR"
+  },
+  {
+   "fieldname": "url_retorna_xml",
+   "fieldtype": "Data",
+   "label": "URL Retorna XML"
+  },
+  {
+   "fieldname": "url_token",
+   "fieldtype": "Data",
+   "label": "URL Token"
+  },
+  {
+   "fieldname": "url_validar",
+   "fieldtype": "Data",
+   "label": "URL Validar"
+  },
+  {
+   "fieldname": "url_registrar",
+   "fieldtype": "Data",
+   "label": "URL Registrar"
+  },
+  {
+   "fieldname": "url_verificar",
+   "fieldtype": "Data",
+   "label": "URL Verificar"
+  },
+  {
+   "fieldname": "url_retorna_cliente",
+   "fieldtype": "Data",
+   "label": "URL Retorna Cliente"
+  },
+  {
+   "fieldname": "url_anular",
+   "fieldtype": "Data",
+   "label": "URL Anular"
+  },
+  {
+   "fieldname": "url_firma",
+   "fieldtype": "Data",
+   "label": "URL Firma"
+  },
+  {
+   "fieldname": "funciones_sql_tab",
+   "fieldtype": "Tab Break",
+   "label": "FUNCIONES SQL"
+  },
+  {
+   "fieldname": "sql_func_certificar",
+   "fieldtype": "Data",
+   "label": "SQL Func Certificar"
+  },
+  {
+   "fieldname": "sql_func_anular",
+   "fieldtype": "Data",
+   "label": "SQL Func Anular"
+  },
+  {
+   "fieldname": "datos_empresa_tab",
+   "fieldtype": "Tab Break",
+   "label": "DATOS EMPRESA"
+  },
+  {
+   "fieldname": "company_nit",
+   "fieldtype": "Data",
+   "label": "Company NIT"
+  },
+  {
+   "fieldname": "isr_regime",
+   "fieldtype": "Data",
+   "label": "ISR Regime"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_agent_retainer",
+   "fieldtype": "Check",
+   "label": "Is Agent Retainer"
+  },
+  {
+   "fieldname": "configuracion_tab",
+   "fieldtype": "Tab Break",
+   "label": "CONFIGURACION"
+  },
+  {
+   "fieldname": "timeout_ms",
+   "fieldtype": "Int",
+   "label": "Timeout (ms)"
+  },
+  {
+   "fieldname": "test_mode",
+   "fieldtype": "Select",
+   "label": "Test Mode",
+   "options": "Y\nN"
+  },
+  {
+   "fieldname": "generate_xml",
+   "fieldtype": "Select",
+   "label": "Generate XML",
+   "options": "Y\nN"
+  },
+  {
+   "fieldname": "generate_log",
+   "fieldtype": "Select",
+   "label": "Generate Log",
+   "options": "Y\nN"
+  },
+  {
+   "fieldname": "modify_alias",
+   "fieldtype": "Select",
+   "label": "Modify Alias",
+   "options": "Y\nN"
+  },
+  {
+   "fieldname": "test_email",
+   "fieldtype": "Data",
+   "label": "Test Email"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "correoemisor",
+   "fieldtype": "Data",
+   "label": "Correo Emisor"
+  },
+  {
+   "fieldname": "nombrecomercial",
+   "fieldtype": "Data",
+   "label": "Nombre Comercial"
+  },
+  {
+   "fieldname": "nombreemisor",
+   "fieldtype": "Data",
+   "label": "Nombre"
+  },
+  {
+   "fieldname": "direccionemisor",
+   "fieldtype": "Data",
+   "label": "Direcci\u00f3n"
+  },
+  {
+   "fieldname": "codigopostalemisor",
+   "fieldtype": "Data",
+   "label": "C\u00f3digo Postal"
+  },
+  {
+   "fieldname": "municipioemisor",
+   "fieldtype": "Data",
+   "label": "Municipio Emisor"
+  },
+  {
+   "fieldname": "departamentoemisor",
+   "fieldtype": "Data",
+   "label": "Departamento Emisor"
+  },
+  {
+   "fieldname": "paisemisor",
+   "fieldtype": "Link",
+   "label": "Pa\u00eds",
+   "options": "Country"
+  },
+  {
+   "fieldname": "receptor_email_default",
+   "fieldtype": "Data",
+   "label": "Receptor Email Default"
+  },
+  {
+   "fieldname": "user",
+   "fieldtype": "Data",
+   "label": "usuario Certificador"
+  },
+  {
+   "fieldname": "contrase\u00f1a_certificador",
+   "fieldtype": "Data",
+   "label": "contrase\u00f1a certificador"
+  },
+  {
+   "fieldname": "certifier",
+   "fieldtype": "Select",
+   "label": "Certificador",
+   "options": "Digifact\nMegaprint\nGuatefacturas"
+  },
+  {
+   "default": "0",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Habilitado"
+  },
+  {
+   "fieldname": "base_url_test",
+   "fieldtype": "Data",
+   "label": "base URL TEST"
+  },
+  {
+   "fieldname": "base_url_prod",
+   "fieldtype": "Data",
+   "label": "base URL PRODUCTIVO"
+  },
+  {
+   "fieldname": "url_ncred",
+   "fieldtype": "Data",
+   "label": "URL Nota Credito"
+  },
+  {
+   "fieldname": "responsedata",
+   "fieldtype": "Select",
+   "label": "Formato x Defecto",
+   "options": "XML\nPDF base 64\nHTML"
+  }
+ ],
+ "links": [],
+ "modified": "2026-01-27 22:51:05.807544",
+ "modified_by": "Administrator",
+ "module": "Brain FEL",
+ "name": "BFEL Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "read": 1,
+   "role": "System Manager",
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

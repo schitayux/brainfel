@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GTDocumento Version="0.1">
+  <SAT>
+    <DTE>
+      <DatosEmision>
+
+        <DatosGenerales
+          FechaHoraEmision="{{ dg.FechaHoraEmision }}"
+          CodigoMoneda="{{ dg.CodigoMoneda }}"
+          Tipo="{{ dg.Tipo }}"
+          {% if dg.NumeroAcceso %}NumeroAcceso="{{ dg.NumeroAcceso }}"{% endif %}
+          {% if dg.Exp %}Exp="{{ dg.Exp }}"{% endif %}
+        />
+
+        <Emisor
+          NITEmisor="{{ em.NITEmisor }}"
+          NombreEmisor="{{ em.NombreEmisor }}"
+          CodigoEstablecimiento="{{ em.CodigoEstablecimiento }}"
+          NombreComercial="{{ em.NombreComercial }}"
+          AfiliacionIVA="{{ em.AfiliacionIVA }}"
+        >
+          <DireccionEmisor>
+            <Direccion>{{ em_dir.Direccion }}</Direccion>
+            <CodigoPostal>{{ em_dir.CodigoPostal }}</CodigoPostal>
+            <Municipio>{{ em_dir.Municipio }}</Municipio>
+            <Departamento>{{ em_dir.Departamento }}</Departamento>
+            <Pais>{{ em_dir.Pais }}</Pais>
+          </DireccionEmisor>
+        </Emisor>
+
+        {% block receptor %}{% endblock %}
+
+        {% if frases %}
+        <Frases>
+          {% for f in frases %}
+          <Frase TipoFrase="{{ f.TipoFrase }}" CodigoEscenario="{{ f.CodigoEscenario }}"/>
+          {% endfor %}
+        </Frases>
+        {% endif %}
+
+        <Items>
+          {% for it in items %}
+          <Item
+            NumeroLinea="{{ it.NumeroLinea }}"
+            BienOServicio="{{ it.BienOServicio }}"
+          >
+            <Cantidad>{{ it.Cantidad }}</Cantidad>
+            <UnidadMedida>{{ it.UnidadMedida }}</UnidadMedida>
+            <Descripcion>{{ it.Descripcion }}</Descripcion>
+            <PrecioUnitario>{{ it.PrecioUnitario }}</PrecioUnitario>
+            <Precio>{{ it.Precio }}</Precio>
+            <Descuento>{{ it.Descuento }}</Descuento>
+
+            <Impuestos>
+              <Impuesto>
+                <NombreCorto>{{ it.IVA.NombreCorto }}</NombreCorto>
+                <CodigoUnidadGravable>{{ it.IVA.CodigoUnidadGravable }}</CodigoUnidadGravable>
+                <MontoGravable>{{ it.IVA.MontoGravable }}</MontoGravable>
+                <MontoImpuesto>{{ it.IVA.MontoImpuesto }}</MontoImpuesto>
+              </Impuesto>
+            </Impuestos>
+
+            <Total>{{ it.Total }}</Total>
+          </Item>
+          {% endfor %}
+        </Items>
+
+        <Totales>
+          <TotalImpuestos>
+            <TotalImpuesto NombreCorto="{{ tot.IVA_NombreCorto }}"
+                           TotalMontoImpuesto="{{ tot.IVA_TotalMontoImpuesto }}"/>
+          </TotalImpuestos>
+          <GranTotal>{{ tot.GranTotal }}</GranTotal>
+        </Totales>
+
+      </DatosEmision>
+    </DTE>
+  </SAT>
+</GTDocumento>

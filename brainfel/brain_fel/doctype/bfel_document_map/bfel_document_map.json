@@ -1,0 +1,103 @@
+{
+    "actions": [],
+    "allow_rename": 1,
+    "creation": "2026-01-22 00:11:59.170229",
+    "doctype": "DocType",
+    "engine": "InnoDB",
+    "field_order": [
+        "erpnext_doctype",
+        "fel_document_type",
+        "sql_function",
+        "enabled",
+        "allow_void",
+        "allow_retry",
+        "notes",
+        "type_docdte",
+        "establecimiento",
+        "bfel_settings"
+    ],
+    "fields": [
+        {
+            "fieldname": "erpnext_doctype",
+            "fieldtype": "Link",
+            "label": "erpnext_doctype",
+            "options": "DocType"
+        },
+        {
+            "fieldname": "fel_document_type",
+            "fieldtype": "Data",
+            "label": "fel_document_type"
+        },
+        {
+            "fieldname": "sql_function",
+            "fieldtype": "Data",
+            "label": "sql_function"
+        },
+        {
+            "fieldname": "enabled",
+            "fieldtype": "Check",
+            "label": "enabled"
+        },
+        {
+            "fieldname": "allow_void",
+            "fieldtype": "Select",
+            "label": "allow_void",
+            "options": "Y\nN"
+        },
+        {
+            "fieldname": "allow_retry",
+            "fieldtype": "Select",
+            "label": "allow_retry",
+            "options": "Y\nN"
+        },
+        {
+            "fieldname": "notes",
+            "fieldtype": "Small Text",
+            "label": "notes"
+        },
+        {
+            "fieldname": "type_docdte",
+            "fieldtype": "Select",
+            "label": "Tipo DTE",
+            "options": "FACT\nFCAM\nFESP\nNABN\nNDEB\nNCRE"
+        },
+        {
+            "fieldname": "establecimiento",
+            "fieldtype": "Data",
+            "label": "Establecimiento"
+        },
+        {
+            "fieldname": "bfel_settings",
+            "fieldtype": "Link",
+            "label": "BFEL Settings",
+            "options": "BFEL Settings"
+        }
+    ],
+    "grid_page_length": 50,
+    "index_web_pages_for_search": 1,
+    "links": [],
+    "modified": "2026-01-27 17:54:02.430120",
+    "modified_by": "Administrator",
+    "module": "Brain FEL",
+    "name": "BFEL Document Map",
+    "owner": "Administrator",
+    "permissions": [
+        {
+            "create": 1,
+            "delete": 1,
+            "email": 1,
+            "export": 1,
+            "print": 1,
+            "read": 1,
+            "report": 1,
+            "role": "System Manager",
+            "share": 1,
+            "write": 1
+        }
+    ],
+    "row_format": "Dynamic",
+    "rows_threshold_for_grid_search": 20,
+    "sort_field": "modified",
+    "sort_order": "DESC",
+    "states": []
+}

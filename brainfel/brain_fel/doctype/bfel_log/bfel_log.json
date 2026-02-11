@@ -1,0 +1,171 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "BFEL-LOG-.YYYY._.#####",
+ "creation": "2026-01-22 00:03:04.536166",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "document_type",
+  "document_name",
+  "company",
+  "status",
+  "uuid",
+  "request_id",
+  "request_payload",
+  "response_payload",
+  "error_message",
+  "http_status",
+  "elapsed_ms",
+  "created_by",
+  "certifier",
+  "environment",
+  "responsedata",
+  "enrolledtimestamp",
+  "backprocessor",
+  "acuserecibosat",
+  "raw_text",
+  "raw",
+  "action"
+ ],
+ "fields": [
+  {
+   "fieldname": "document_type",
+   "fieldtype": "Data",
+   "label": "document_type"
+  },
+  {
+   "fieldname": "document_name",
+   "fieldtype": "Data",
+   "label": "document_name"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "status",
+   "options": "Draft\nCertified\nError\nVoided\nSuccess"
+  },
+  {
+   "fieldname": "uuid",
+   "fieldtype": "Data",
+   "label": "uuid"
+  },
+  {
+   "fieldname": "request_id",
+   "fieldtype": "Data",
+   "label": "request_id"
+  },
+  {
+   "fieldname": "request_payload",
+   "fieldtype": "Long Text",
+   "label": "request_payload"
+  },
+  {
+   "fieldname": "response_payload",
+   "fieldtype": "Long Text",
+   "label": "response_payload"
+  },
+  {
+   "fieldname": "error_message",
+   "fieldtype": "Small Text",
+   "label": "error_message"
+  },
+  {
+   "fieldname": "http_status",
+   "fieldtype": "Int",
+   "label": "http_status"
+  },
+  {
+   "fieldname": "elapsed_ms",
+   "fieldtype": "Int",
+   "label": "elapsed_ms"
+  },
+  {
+   "fieldname": "created_by",
+   "fieldtype": "Link",
+   "label": "created_by",
+   "options": "User"
+  },
+  {
+   "fieldname": "certifier",
+   "fieldtype": "Data",
+   "label": "certifier"
+  },
+  {
+   "fieldname": "environment",
+   "fieldtype": "Select",
+   "label": "environment",
+   "options": "Test\nProd"
+  },
+  {
+   "fieldname": "responsedata",
+   "fieldtype": "Data",
+   "label": "Response Data"
+  },
+  {
+   "fieldname": "enrolledtimestamp",
+   "fieldtype": "Datetime",
+   "label": "Fecha y Hora Certificaci\u00f3n"
+  },
+  {
+   "fieldname": "backprocessor",
+   "fieldtype": "Data",
+   "label": "backprocessor"
+  },
+  {
+   "fieldname": "acuserecibosat",
+   "fieldtype": "Data",
+   "label": "codigos SAT"
+  },
+  {
+   "fieldname": "raw_text",
+   "fieldtype": "Long Text",
+   "label": "respuesta certificador"
+  },
+  {
+   "fieldname": "raw",
+   "fieldtype": "Long Text",
+   "label": "Json Completo Cert."
+  },
+  {
+   "fieldname": "action",
+   "fieldtype": "Select",
+   "label": "Acci\u00f3n",
+   "options": "CERTIFY\nCANCEL\nQUERY"
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-01-28 16:27:48.912939",
+ "modified_by": "Administrator",
+ "module": "Brain FEL",
+ "name": "BFEL Log",
+ "naming_rule": "Expression (old style)",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

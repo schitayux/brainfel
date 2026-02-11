@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dte:GTDocumento Version="0.1" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <dte:SAT ClaseDocumento="dte">
+        <dte:DTE ID="DatosCertificados">
+            <dte:DatosEmision ID="DatosEmision">
+                <dte:DatosGenerales Tipo="NDEB" FechaHoraEmision="2021-07-29T09:20:57"
+                    CodigoMoneda="GTQ" Exp="SI"/>
+                <dte:Emisor NITEmisor="123456" NombreEmisor="FEL TEST" CodigoEstablecimiento="1"
+                    NombreComercial="ESTABLECIMIENTO DE PRUEBA" AfiliacionIVA="GEN">
+                    <dte:DireccionEmisor>
+                        <dte:Direccion>4 AVENIDA 15-70 ZONA 10 LOCAL 3 EDIFICIO
+                            PALADIUM</dte:Direccion>
+                        <dte:CodigoPostal>01010</dte:CodigoPostal>
+                        <dte:Municipio>Guatemala</dte:Municipio>
+                        <dte:Departamento>Guatemala</dte:Departamento>
+                        <dte:Pais>GT</dte:Pais>
+                    </dte:DireccionEmisor>
+                </dte:Emisor>
+                <dte:Receptor NombreReceptor="TENGO GROUP, SOCIEDAD ANONIMA" IDReceptor="96262109"
+                    TipoEspecial="EXT">
+                    <dte:DireccionReceptor>
+                        <dte:Direccion>51 Sherwood Terrace, Suite 51G</dte:Direccion>
+                        <dte:CodigoPostal>01010</dte:CodigoPostal>
+                        <dte:Municipio>LAKE BLUFF</dte:Municipio>
+                        <dte:Departamento>ILLINOIS</dte:Departamento>
+                        <dte:Pais>US</dte:Pais>
+                    </dte:DireccionReceptor>
+                </dte:Receptor>
+                <dte:Frases>
+                    <dte:Frase TipoFrase="1" CodigoEscenario="1"/>
+                    <dte:Frase TipoFrase="4" CodigoEscenario="1"/>
+                </dte:Frases>
+                <dte:Items>
+                    <dte:Item NumeroLinea="1" BienOServicio="B">
+                        <dte:Cantidad>1.0000000</dte:Cantidad>
+                        <dte:UnidadMedida>UNO</dte:UnidadMedida>
+                        <dte:Descripcion>PASTILLAS DE FRENO PULSAR 18411351125</dte:Descripcion>
+                        <dte:PrecioUnitario>18.5000000</dte:PrecioUnitario>
+                        <dte:Precio>18.5000000</dte:Precio>
+                        <dte:Descuento>0</dte:Descuento>
+                        <dte:Impuestos>
+                            <dte:Impuesto>
+                                <dte:NombreCorto>IVA</dte:NombreCorto>
+                                <dte:CodigoUnidadGravable>2</dte:CodigoUnidadGravable>
+                                <dte:MontoGravable>18.5000000</dte:MontoGravable>
+                                <dte:MontoImpuesto>0</dte:MontoImpuesto>
+                            </dte:Impuesto>
+                        </dte:Impuestos>
+                        <dte:Total>18.5000000</dte:Total>
+                    </dte:Item>
+                </dte:Items>
+                <dte:Totales>
+                    <dte:TotalImpuestos>
+                        <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="0"/>
+                    </dte:TotalImpuestos>
+                    <dte:GranTotal>18.5000000</dte:GranTotal>
+                </dte:Totales>
+                <dte:Complementos>
+                    <dte:Complemento URIComplemento="cno" NombreComplemento="NDEB"
+                        xsi:schemaLocation="http://www.sat.gob.gt/face2/ComplementoReferenciaNota/0.1.0GT_Complemento_Referencia_Nota-0.1.0.xsd"
+                        xmlns:cno="http://www.sat.gob.gt/face2/ComplementoReferenciaNota/0.1.0">
+                        <cno:ReferenciasNota Version="0.1"
+                            NumeroAutorizacionDocumentoOrigen="4512080A-69C9-4F13-9794-7254161F554E"
+                            FechaEmisionDocumentoOrigen="2021-07-29"
+                            NumeroDocumentoOrigen="1774800659" SerieDocumentoOrigen="4512080A"
+                            MotivoAjuste="CORTESIA AUTORIZADA POR REPRESENTANTE LEGAL"/>
+                    </dte:Complemento>
+                </dte:Complementos>
+            </dte:DatosEmision>
+        </dte:DTE>
+        <dte:Adenda>
+            <dtecomm:Informacion_COMERCIAL xsi:schemaLocation="https://www.digifact.com.gt/dtecomm"
+                xmlns:dtecomm="https://www.digifact.com.gt/dtecomm">
+                <dtecomm:InformacionAdicional Version="2020_06_01">
+                    <dtecomm:REFERENCIA_INTERNA>FRONT-8194-42A7-898E-CDAEDBA0ED47</dtecomm:REFERENCIA_INTERNA>
+                    <dtecomm:FECHA_REFERENCIA>2021-07-29T09:20:57</dtecomm:FECHA_REFERENCIA>
+                    <dtecomm:VALIDAR_REFERENCIA_INTERNA>VALIDAR</dtecomm:VALIDAR_REFERENCIA_INTERNA>
+                    <dtecomm:INFORMACION_ADICIONAL>
+                        <dtecomm:Detalle Data="OBSERVACIONES" Value="-"/>
+                        <dtecomm:Detalle Data="CANTIDAD_LETRAS"
+                            Value="DIECIOCHO QUETZALES CON 50/100"/>
+                    </dtecomm:INFORMACION_ADICIONAL>
+                </dtecomm:InformacionAdicional>
+            </dtecomm:Informacion_COMERCIAL>
+        </dte:Adenda>
+    </dte:SAT>
+</dte:GTDocumento>

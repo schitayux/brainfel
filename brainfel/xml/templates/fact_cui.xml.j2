@@ -1,0 +1,18 @@
+{% extends "base_fel.xml.j2" %}
+
+{% block receptor %}
+<Receptor
+  IDReceptor="{{ rec.IDReceptor }}"
+  TipoEspecial="CUI"
+  NombreReceptor="{{ rec.NombreReceptor }}"
+  CorreoReceptor="{{ rec.CorreoReceptor }}"
+>
+  <DireccionReceptor>
+    <Direccion>{{ rec_dir.Direccion }}</Direccion>
+    <CodigoPostal>{{ rec_dir.CodigoPostal }}</CodigoPostal>
+    <Municipio>{{ rec_dir.Municipio }}</Municipio>
+    <Departamento>{{ rec_dir.Departamento }}</Departamento>
+    <Pais>{{ rec_dir.Pais }}</Pais>
+  </DireccionReceptor>
+</Receptor>
+{% endblock %}

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dte:GTDocumento Version="0.1" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <dte:SAT ClaseDocumento="dte">
+        <dte:DTE ID="DatosCertificados">
+            <dte:DatosEmision ID="DatosEmision">
+                <dte:DatosGenerales Tipo="NCRE" FechaHoraEmision="2023-12-20T08:57:33"
+                    CodigoMoneda="GTQ" Exp="SI"/>
+                <dte:Emisor NITEmisor="123456" NombreEmisor="FEL TEST" CodigoEstablecimiento="1"
+                    NombreComercial="ESTABLECIMIENTO DE PRUEBA" AfiliacionIVA="GEN">
+                    <dte:DireccionEmisor>
+                        <dte:Direccion>4 AVENIDA 15-70 ZONA 10 LOCAL 3 EDIFICIO
+                            PALADIUM</dte:Direccion>
+                        <dte:CodigoPostal>01010</dte:CodigoPostal>
+                        <dte:Municipio>Guatemala</dte:Municipio>
+                        <dte:Departamento>Guatemala</dte:Departamento>
+                        <dte:Pais>GT</dte:Pais>
+                    </dte:DireccionEmisor>
+                </dte:Emisor>
+                <dte:Receptor NombreReceptor="REPRESENTACIONES BALAM, SOCIEDAD ANONIMA"
+                    IDReceptor="4522648" TipoEspecial="EXT">
+                    <dte:DireccionReceptor>
+                        <dte:Direccion>51 Sherwood Terrace, Suite 51G Lake Bluff, IL
+                            60044</dte:Direccion>
+                        <dte:CodigoPostal>01010</dte:CodigoPostal>
+                        <dte:Municipio>TRUJILLO</dte:Municipio>
+                        <dte:Departamento>SANTIAGO</dte:Departamento>
+                        <dte:Pais>SV</dte:Pais>
+                    </dte:DireccionReceptor>
+                </dte:Receptor>
+                <dte:Frases>
+                    <dte:Frase TipoFrase="1" CodigoEscenario="1"/>
+                    <dte:Frase TipoFrase="4" CodigoEscenario="1"/>
+                </dte:Frases>
+                <dte:Items>
+                    <dte:Item NumeroLinea="1" BienOServicio="S">
+                        <dte:Cantidad>1.0000000</dte:Cantidad>
+                        <dte:UnidadMedida>UNO</dte:UnidadMedida>
+                        <dte:Descripcion>POR CONSUMO DE ALIMENTOS</dte:Descripcion>
+                        <dte:PrecioUnitario>50.0000000</dte:PrecioUnitario>
+                        <dte:Precio>50.0000000</dte:Precio>
+                        <dte:Descuento>0</dte:Descuento>
+                        <dte:Impuestos>
+                            <dte:Impuesto>
+                                <dte:NombreCorto>IVA</dte:NombreCorto>
+                                <dte:CodigoUnidadGravable>2</dte:CodigoUnidadGravable>
+                                <dte:MontoGravable>50.0000000</dte:MontoGravable>
+                                <dte:MontoImpuesto>0</dte:MontoImpuesto>
+                            </dte:Impuesto>
+                        </dte:Impuestos>
+                        <dte:Total>50.0000000</dte:Total>
+                    </dte:Item>
+                </dte:Items>
+                <dte:Totales>
+                    <dte:TotalImpuestos>
+                        <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="0"/>
+                    </dte:TotalImpuestos>
+                    <dte:GranTotal>50.0000000</dte:GranTotal>
+                </dte:Totales>
+                <dte:Complementos>
+                    <dte:Complemento URIComplemento="cno" NombreComplemento="NCRE"
+                        xsi:schemaLocation="http://www.sat.gob.gt/face2/ComplementoReferenciaNota/0.1.0GT_Complemento_Referencia_Nota-0.1.0.xsd"
+                        xmlns:cno="http://www.sat.gob.gt/face2/ComplementoReferenciaNota/0.1.0">
+                        <cno:ReferenciasNota Version="0.1"
+                            NumeroAutorizacionDocumentoOrigen="14C6F2D3-70AB-4A28-B12B-785A8221BC82"
+                            FechaEmisionDocumentoOrigen="2023-12-20"
+                            NumeroDocumentoOrigen="1890273832" SerieDocumentoOrigen="14C6F2D3"
+                            MotivoAjuste="POR CANCELACION DE SERVICIO"/>
+                    </dte:Complemento>
+                </dte:Complementos>
+            </dte:DatosEmision>
+        </dte:DTE>
+        <dte:Adenda>
+            <dtecomm:Informacion_COMERCIAL xsi:schemaLocation="https://www.digifact.com.gt/dtecomm"
+                xmlns:dtecomm="https://www.digifact.com.gt/dtecomm">
+                <dtecomm:InformacionAdicional Version="2020_06_01">
+                    <dtecomm:REFERENCIA_INTERNA>FRONT-F9BC-47D1-9DE2-C2B506DBCD98</dtecomm:REFERENCIA_INTERNA>
+                    <dtecomm:FECHA_REFERENCIA>2023-12-20T08:57:33</dtecomm:FECHA_REFERENCIA>
+                    <dtecomm:VALIDAR_REFERENCIA_INTERNA>VALIDAR</dtecomm:VALIDAR_REFERENCIA_INTERNA>
+                    <dtecomm:INFORMACION_ADICIONAL>
+                        <dtecomm:Detalle Data="OBSERVACIONES" Value="-"/>
+                        <dtecomm:Detalle Data="CANTIDAD_LETRAS"
+                            Value="CINCUENTA QUETZALES CON 00/100"/>
+                    </dtecomm:INFORMACION_ADICIONAL>
+                </dtecomm:InformacionAdicional>
+            </dtecomm:Informacion_COMERCIAL>
+        </dte:Adenda>
+    </dte:SAT>
+</dte:GTDocumento>

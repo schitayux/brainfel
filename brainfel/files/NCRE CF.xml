@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<dte:GTDocumento Version="0.1" xmlns:dte="http://www.sat.gob.gt/dte/fel/0.2.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <dte:SAT ClaseDocumento="dte">
+        <dte:DTE ID="DatosCertificados">
+            <dte:DatosEmision ID="DatosEmision">
+                <dte:DatosGenerales Tipo="NCRE" FechaHoraEmision="2023-12-20T08:57:33"
+                    CodigoMoneda="GTQ"/>
+                <dte:Emisor NITEmisor="123456" NombreEmisor="NOMBRE CLIENTE"
+                    CodigoEstablecimiento="6" NombreComercial="NOMBRE ESTABLECIMIENTO"
+                    AfiliacionIVA="GEN">
+                    <dte:DireccionEmisor>
+                        <dte:Direccion>7 CALLE ADICIONAL 0-69 ZONA 2</dte:Direccion>
+                        <dte:CodigoPostal>09001</dte:CodigoPostal>
+                        <dte:Municipio>Quetzaltenango</dte:Municipio>
+                        <dte:Departamento>Quetzaltenango</dte:Departamento>
+                        <dte:Pais>GT</dte:Pais>
+                    </dte:DireccionEmisor>
+                </dte:Emisor>
+                <dte:Receptor NombreReceptor="CONSUMIDOR FINAL" IDReceptor="CF">
+                    <dte:DireccionReceptor>
+                        <dte:Direccion>CALLE RODOLFO ROBLES 8-70 ZONA 3</dte:Direccion>
+                        <dte:CodigoPostal>09001</dte:CodigoPostal>
+                        <dte:Municipio>Quetzaltenango</dte:Municipio>
+                        <dte:Departamento>Quetzaltenango</dte:Departamento>
+                        <dte:Pais>GT</dte:Pais>
+                    </dte:DireccionReceptor>
+                </dte:Receptor>
+                <dte:Frases>
+                    <dte:Frase TipoFrase="1" CodigoEscenario="1"/>
+                </dte:Frases>
+                <dte:Items>
+                    <dte:Item NumeroLinea="1" BienOServicio="S">
+                        <dte:Cantidad>1</dte:Cantidad>
+                        <dte:UnidadMedida>UND</dte:UnidadMedida>
+                        <dte:Descripcion>Piston 1-12111-626-0 1-2022 (IZUMI AZUL)</dte:Descripcion>
+                        <dte:PrecioUnitario>150.0000</dte:PrecioUnitario>
+                        <dte:Precio>150.0000</dte:Precio>
+                        <dte:Descuento>0</dte:Descuento>
+                        <dte:Impuestos>
+                            <dte:Impuesto>
+                                <dte:NombreCorto>IVA</dte:NombreCorto>
+                                <dte:CodigoUnidadGravable>1</dte:CodigoUnidadGravable>
+                                <dte:MontoGravable>133.9286</dte:MontoGravable>
+                                <dte:MontoImpuesto>16.0714</dte:MontoImpuesto>
+                            </dte:Impuesto>
+                        </dte:Impuestos>
+                        <dte:Total>150.0000</dte:Total>
+                    </dte:Item>
+                </dte:Items>
+                <dte:Totales>
+                    <dte:TotalImpuestos>
+                        <dte:TotalImpuesto NombreCorto="IVA" TotalMontoImpuesto="16.0714"/>
+                    </dte:TotalImpuestos>
+                    <dte:GranTotal>150.0000</dte:GranTotal>
+                </dte:Totales>
+                <dte:Complementos>
+                    <dte:Complemento URIComplemento="cno" NombreComplemento="NCRE"
+                        xsi:schemaLocation="http://www.sat.gob.gt/face2/ComplementoReferenciaNota/0.1.0GT_Complemento_Referencia_Nota-0.1.0.xsd"
+                        xmlns:cno="http://www.sat.gob.gt/face2/ComplementoReferenciaNota/0.1.0">
+                        <cno:ReferenciasNota Version="0.1"
+                            NumeroAutorizacionDocumentoOrigen="649B6A4-1674-426B-995C-13F663CAEA3E"
+                            FechaEmisionDocumentoOrigen="2023-12-20"
+                            NumeroDocumentoOrigen="1477723208" SerieDocumentoOrigen="4BE2B951"
+                            MotivoAjuste="monto de prueba"/>
+                    </dte:Complemento>
+                </dte:Complementos>
+            </dte:DatosEmision>
+        </dte:DTE>
+        <dte:Adenda>
+            <dtecomm:Informacion_COMERCIAL xsi:schemaLocation="https://www.digifact.com.gt/dtecomm"
+                xmlns:dtecomm="https://www.digifact.com.gt/dtecomm">
+                <dtecomm:InformacionAdicional Version="2020_06_01">
+                    <dtecomm:REFERENCIA_INTERNA>FRONT-1191-4F2D-A587-5428B66F8816</dtecomm:REFERENCIA_INTERNA>
+                    <dtecomm:FECHA_REFERENCIA>2023-12-20T08:57:33</dtecomm:FECHA_REFERENCIA>
+                    <dtecomm:VALIDAR_REFERENCIA_INTERNA>VALIDAR</dtecomm:VALIDAR_REFERENCIA_INTERNA>
+                    <dtecomm:INFORMACION_ADICIONAL>
+                        <dtecomm:Detalle Data="OBSERVACIONES" Value="-"/>
+                        <dtecomm:Detalle Data="CANTIDAD_LETRAS"
+                            Value="CIENTO CINCUENTA QUETZALES CON 00/100"/>
+                    </dtecomm:INFORMACION_ADICIONAL>
+                </dtecomm:InformacionAdicional>
+            </dtecomm:Informacion_COMERCIAL>
+        </dte:Adenda>
+    </dte:SAT>
+</dte:GTDocumento>
