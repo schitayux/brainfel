@@ -1,0 +1,10 @@
+include *.txt
+include *.md
+recursive-include brainfel *.py
+recursive-include brainfel *.html
+recursive-include brainfel *.js
+recursive-include brainfel *.css
+recursive-include brainfel *.png
+recursive-include brainfel *.jpg
+recursive-include brainfel *.svg
+recursive-include brainfel *.json
