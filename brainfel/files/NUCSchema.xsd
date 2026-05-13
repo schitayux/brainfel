@@ -1,0 +1,1006 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+	<xs:element name="Root">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Version" type="xs:string" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Elemento que contiene la version del formato de la factura electrónica.</xs:documentation>
+					</xs:annotation>
+				</xs:element>
+				<xs:element name="CountryCode" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Código del país donde pertenece la factura electrónica a generar.</xs:documentation>
+					</xs:annotation>
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:pattern value="[A-Z]{2,3}"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+				<xs:element name="Header" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Elemento que contiene la información general de la factura electrónica.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DocType" type="xs:string" maxOccurs="1" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Tipo de documento a generar.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="GUID" type="xs:string" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Identificador de la factura electrónica.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="IssuedDateTime" type="xs:dateTime" maxOccurs="1"
+								minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Fecha y hora de emision de la factura electrónica.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AdditionalIssueType" type="xs:string" maxOccurs="1"
+								minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Ambiente de destino de la factura electrónica.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="ExchangeRate" type="Money" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Tipo de cambio de la factura electrónica.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Currency" maxOccurs="1" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Moneda utilizada en la operación.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:pattern value="[A-Z]{3}"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Reference" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información de referencia de la factura electrónica.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Code" type="xs:string" maxOccurs="1"
+											minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Código de referencia.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Date" type="xs:dateTime" maxOccurs="1"
+											minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Fecha y hora de la referencia.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AdditionalIssueDocInfo" type="InfoAdicional"
+								minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información general adicional de la factura electrónica.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Seller" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Elemento que contiene la información del emisor de la factura electrónica.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TaxID" minOccurs="1" maxOccurs="1" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Identificador tributario del emisor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TaxIDType" minOccurs="0" maxOccurs="1"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Tipo de contribuyente perteneciente al emisor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TaxIDAdditionalInfo" minOccurs="0" maxOccurs="1"
+								type="InfoAdicional">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información tributaria adicional del emisor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Name" minOccurs="1" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Nombre o razón social del emisor.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="3"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="FiscalCategory" minOccurs="0" maxOccurs="1"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Categoría fiscal del emisor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Contact" minOccurs="0" maxOccurs="1" type="Contact">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información de contacto del emisor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AdditionlInfo" minOccurs="0" maxOccurs="1"
+								type="InfoAdicional">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información adicional del emisor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AddressInfo" type="AddressInfo" minOccurs="0"
+								maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene la dirección del emisor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="BranchInfo" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información sobre el establecimiento del emisor.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Code" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Codigo relacionado al establecimiento del emisor.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+												<xs:minLength value="1"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Name" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Nombre o razón social del emisor.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+												<xs:minLength value="3"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="AddressInfo" type="AddressInfo"
+											minOccurs="1" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene la información de la dirección del establecimiento del emisor.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Phone" minOccurs="0" maxOccurs="1"
+											type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Número telefónico del establecimiento.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="AdditionalBranchInfo" minOccurs="0"
+											maxOccurs="1" type="InfoAdicional">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información adicional sobre el establecimiento del emisor.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Buyer" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Elemento que contiene la información del receptor de la factura electrónica.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="TaxID" minOccurs="1" maxOccurs="1" type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Identificador tributario del receptor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TaxIDType" minOccurs="0" maxOccurs="1"
+								type="xs:string">
+								<xs:annotation>
+									<xs:documentation>Tipo de contribuyente perteneciente al receptor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TaxIDAdditionalInfo" minOccurs="0" maxOccurs="1"
+								type="InfoAdicional">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información tributaria adicional del receptor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="Name" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Nombre o razón social del receptor.</xs:documentation>
+								</xs:annotation>
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:minLength value="3"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="Contact" minOccurs="0" maxOccurs="1" type="Contact">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información de contacto del receptor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AdditionlInfo" minOccurs="0" maxOccurs="1"
+								type="InfoAdicional">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información adicional del receptor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AddressInfo" type="AddressInfo" minOccurs="0"
+								maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene la dirección del receptor.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ThirdParties" minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Elemento para agregar información sobre terceros.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="ThirdParty" minOccurs="1" maxOccurs="10">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene la información sobre el tercero.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TaxID" minOccurs="1" maxOccurs="1"
+											type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Identificador tributario.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TaxIDType" minOccurs="0" maxOccurs="1"
+											type="xs:string">
+											<xs:annotation>
+												<xs:documentation>Tipo de contribuyente perteneciente al tercero.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TaxIDAdditionalInfo" minOccurs="0"
+											maxOccurs="1" type="InfoAdicional">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información tributaria adicional.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Name" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Nombre o razón social.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+												<xs:minLength value="3"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Contact" minOccurs="0" maxOccurs="1"
+											type="Contact">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información de contacto.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="AdditionlInfo" minOccurs="0" maxOccurs="1"
+											type="InfoAdicional">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información adicional del tercero.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="AddressInfo" type="AddressInfo"
+											minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene la dirección del tercero.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Items">
+					<xs:annotation>
+						<xs:documentation>Elemento que contiene la información de los items.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Item" minOccurs="0" maxOccurs="unbounded">
+								<xs:annotation>
+									<xs:documentation>Elemento que describe la información de un item.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Codes" type="CodesType" minOccurs="0"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información relacionada a códigos del item.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Type" type="xs:string" minOccurs="0"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Tipo o clasificación del item.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Description" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Descripción del item.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+												<xs:minLength value="2"/>
+												<xs:maxLength value="1000"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Qty" type="QTYType" minOccurs="0"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Cantidad del item.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="UnitOfMeasure" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Unidad de medida.</xs:documentation>
+											</xs:annotation>
+											<xs:simpleType>
+												<xs:restriction base="xs:string">
+												<xs:minLength value="1"/>
+												<xs:maxLength value="20"/>
+												</xs:restriction>
+											</xs:simpleType>
+										</xs:element>
+										<xs:element name="Price" type="Money" minOccurs="1"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Precio unitario del item.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Discounts" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene la información de los descuentos aplicados al item.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+												<xs:element name="Discount"
+												type="TransactionsType" minOccurs="1"
+												maxOccurs="5">
+												<xs:annotation>
+												<xs:documentation>Elemento que describe el descuento.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Taxes" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene la información de los impuestos aplicados al item.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+												<xs:element name="Tax" type="TransactionsType"
+												minOccurs="1" maxOccurs="15">
+												<xs:annotation>
+												<xs:documentation>Elemento que describe el impuesto.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Charges" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene la información de los cargos aplicados al item.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+												<xs:element name="Charge" type="TransactionsType"
+												minOccurs="1" maxOccurs="10">
+												<xs:annotation>
+												<xs:documentation>Elemento que describe el cargo.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="Totals" maxOccurs="1" minOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información relacionada a precios totales de un item.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+												<xs:element name="TotalBDiscount" minOccurs="0"
+												maxOccurs="1" type="Money">
+												<xs:annotation>
+												<xs:documentation>Total antes de descuentos.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												<xs:element name="TotalWDiscount" minOccurs="0"
+												maxOccurs="1" type="Money">
+												<xs:annotation>
+												<xs:documentation>Total aplicando descuentos.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												<xs:element name="TotalBTaxes" minOccurs="0"
+												maxOccurs="1" type="Money">
+												<xs:annotation>
+												<xs:documentation>Total antes de impuestos.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												<xs:element name="TotalWTaxes" minOccurs="0"
+												maxOccurs="1" type="Money">
+												<xs:annotation>
+												<xs:documentation>Total aplicando impuestos.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												<xs:element name="SpecificTotal" minOccurs="0"
+												maxOccurs="1" type="Money">
+												<xs:annotation>
+												<xs:documentation>Total aplicando otras tasas, cargos, seguros, etc.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												<xs:element name="TotalItem" minOccurs="1"
+												maxOccurs="1" type="Money">
+												<xs:annotation>
+												<xs:documentation>Precio total del item.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="AdditionalInfo" maxOccurs="1"
+											minOccurs="0" type="InfoAdicional">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información adicional del item.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="Number">
+										<xs:annotation>
+											<xs:documentation>Número secuencial del item.</xs:documentation>
+										</xs:annotation>
+										<xs:simpleType>
+											<xs:restriction base="xs:integer">
+												<xs:minInclusive value="1"/>
+											</xs:restriction>
+										</xs:simpleType>
+									</xs:attribute>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Charges" minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Elemento para agregar la información de cargos adicionales sobre la factura electrónica.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Charge" minOccurs="1" maxOccurs="5"
+								type="TransactionsType">
+								<xs:annotation>
+									<xs:documentation>Elemento que describe la información del cargo a aplicar.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Totals" minOccurs="1" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Elemento que contiene la información sobre el total de la factura electrónica.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="QtyItems" maxOccurs="1" minOccurs="0"
+								type="xs:integer">
+								<xs:annotation>
+									<xs:documentation>Cantidad de items en la factura electrónica.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TotalItems" maxOccurs="1" minOccurs="0" type="Money">
+								<xs:annotation>
+									<xs:documentation>Precio total de los items sin aplicar impuestos.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TotalTaxableAmount" maxOccurs="1" minOccurs="0"
+								type="Money">
+								<xs:annotation>
+									<xs:documentation>Impuesto total a aplicar.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="TotalTaxes" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene impuestos aplicados al total de la factura electrónica.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TotalTax" minOccurs="0" maxOccurs="10"
+											type="TransactionsType">
+											<xs:annotation>
+												<xs:documentation>Elemento que describe el impuesto.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="TotalCharges" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información sobre cargos adicionales aplicados a la factura electrónica.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TotalCharge" minOccurs="1" maxOccurs="10"
+											type="TransactionsType">
+											<xs:annotation>
+												<xs:documentation>Elemento que describe el cargo.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="TotalDiscounts" minOccurs="0" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información sobre descuentos aplicados a la factura electrónica.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Discount" minOccurs="1" maxOccurs="10"
+											type="TransactionsType">
+											<xs:annotation>
+												<xs:documentation>Elemento que describe el descuento.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="GrandTotal" minOccurs="1" maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene la información sobre el precio total de la factura.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="TotalBTaxes" maxOccurs="1" minOccurs="0"
+											type="Money">
+											<xs:annotation>
+												<xs:documentation>Total antes de impuestos.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TotalWTaxes" maxOccurs="1" minOccurs="0"
+											type="Money">
+											<xs:annotation>
+												<xs:documentation>Total aplicando impuestos.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TotalBDiscounts" maxOccurs="1"
+											minOccurs="0" type="Money">
+											<xs:annotation>
+												<xs:documentation>Total antes de descuentos.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="TotalWDiscounts" maxOccurs="1"
+											minOccurs="0" type="Money">
+											<xs:annotation>
+												<xs:documentation>Total aplicando descuentos.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="ExplicitTotal" maxOccurs="1" minOccurs="0"
+											type="Money">
+											<xs:annotation>
+												<xs:documentation>Precio total de la factura, sin redondear.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="InvoiceTotal" maxOccurs="1" minOccurs="1"
+											type="Money">
+											<xs:annotation>
+												<xs:documentation>Precio total de la factura, redondeado.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="InWords" maxOccurs="3" minOccurs="0">
+								<xs:annotation>
+									<xs:documentation>Elemento para describir información relacionada al precio total de una factura.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:simpleContent>
+										<xs:extension base="xs:string">
+											<xs:attribute name="lang">
+												<xs:annotation>
+												<xs:documentation>Idioma en que se escribe la información.</xs:documentation>
+												</xs:annotation>
+											</xs:attribute>
+										</xs:extension>
+									</xs:simpleContent>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="AdditionalInfo" type="InfoAdicional" maxOccurs="1"
+								minOccurs="0" nillable="false"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Payments" minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Elemento que contiene la información de pago de la factura electrónica.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Payment" maxOccurs="unbounded" minOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Elemento que describe un pago.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Type" type="xs:string" minOccurs="0"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Tipo de pago.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Code" type="xs:string" minOccurs="0"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Código del pago.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Description" type="xs:string"
+											minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Descripción del pago.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Date" type="xs:dateTime" minOccurs="0"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Fecha y hora de pago.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Amount" type="Money" minOccurs="1"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Total pagado.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="AditionalData" type="InfoAdicional"
+											minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información adicional a la forma de pago.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="AdditionalDocumentInfo" minOccurs="0" maxOccurs="1">
+					<xs:annotation>
+						<xs:documentation>Elemento para agregar información adicional sobre la factura electrónica.</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="DocTemplate" type="xs:string" minOccurs="0"
+								maxOccurs="1">
+								<xs:annotation>
+									<xs:documentation>Plantilla del documento.</xs:documentation>
+								</xs:annotation>
+							</xs:element>
+							<xs:element name="AdditionalInfo" minOccurs="0" maxOccurs="25">
+								<xs:annotation>
+									<xs:documentation>Elemento que contiene información adicional.</xs:documentation>
+								</xs:annotation>
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Code" type="xs:string" minOccurs="0"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Codigo adicional.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Type" type="xs:string" minOccurs="0"
+											maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Tipo de dato adicional.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<xs:element name="Description" type="xs:string"
+											minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Descripción adicional.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+										<!-- DIRECCION LOCAL DE ENTREGA-->
+										<xs:element name="AddressInfo" type="AddressInfo"
+											minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información adicional sobre la dirección de un establecimiento.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+
+										<xs:element name="Texts" minOccurs="0" maxOccurs="1">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información sobre textos.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+												<xs:element name="Text" minOccurs="0"
+												maxOccurs="unbounded">
+												<xs:annotation>
+												<xs:documentation>Elemento que describe el texto.</xs:documentation>
+												</xs:annotation>
+												<xs:complexType>
+												<xs:attribute name="CNo" type="xs:string">
+												<xs:annotation>
+												<xs:documentation>Número C.</xs:documentation>
+												</xs:annotation>
+												</xs:attribute>
+												<xs:attribute name="RNo" type="xs:string">
+												<xs:annotation>
+												<xs:documentation>Número R.</xs:documentation>
+												</xs:annotation>
+												</xs:attribute>
+												</xs:complexType>
+												</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="AditionalData" maxOccurs="1" minOccurs="0">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene datos adicionales.</xs:documentation>
+											</xs:annotation>
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="Data" maxOccurs="1000"
+												minOccurs="1" type="InfoAdicional">
+
+												<xs:annotation>
+												<xs:documentation>Elemento que contiene datos adicionales sobre documentos, referencias, etc.</xs:documentation>
+												</xs:annotation>
+												</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="AditionalInfo" maxOccurs="1" minOccurs="0"
+											type="InfoAdicional">
+											<xs:annotation>
+												<xs:documentation>Elemento que contiene información adicional de la factura electrónica.</xs:documentation>
+											</xs:annotation>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<!-- <xs:element name="TaxEntityResponse" maxOccurs="1" minOccurs="0" type="InfoAdicional"/> -->
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:complexType name="AddressInfo">
+		<xs:annotation>
+			<xs:documentation>Tipo de elemento que contiene informacion de la dirección de un establecimiento.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Address" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Dirección de la ubicación.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:minLength value="3"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="City" maxOccurs="1" minOccurs="0" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Ciudad o corregimiento donde se encuentra la dirección.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="District" maxOccurs="1" minOccurs="0" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Distrito donde se encuentra la ciudad.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="State" maxOccurs="1" minOccurs="0" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Estado o provincia donde se encuentra el distrito.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Country" maxOccurs="1" minOccurs="1">
+				<xs:annotation>
+					<xs:documentation>País donde se encuentra el estado.</xs:documentation>
+				</xs:annotation>
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[A-Z]{2,3}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Contact">
+		<xs:annotation>
+			<xs:documentation>Tipo de elemento que contiene informacion de contacto.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="PhoneList" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Elemento que contiene la lista de números telefónicos.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Phone" type="xs:string" minOccurs="1" maxOccurs="5">
+							<xs:annotation>
+								<xs:documentation>Número telefónico válido.</xs:documentation>
+							</xs:annotation>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="EmailList" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Elemento que contiene la lista de correos electrónicos.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="Email" minOccurs="1" maxOccurs="5">
+							<xs:annotation>
+								<xs:documentation>Correo electrónico válido.</xs:documentation>
+							</xs:annotation>
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:pattern
+										value="[a-zA-ZñÑ0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+									/>
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:element>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="Website" minOccurs="0" maxOccurs="1" type="xs:string">
+				<xs:annotation>
+					<xs:documentation>Sitio web del contacto.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+
+	<xs:simpleType name="Money">
+		<xs:annotation>
+			<xs:documentation>Tipo de dato para las cantidades monetarias.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:pattern value="\d*\.\d{2,6}"/>
+			<xs:minInclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="QTYType">
+		<xs:annotation>
+			<xs:documentation>Tipo de dato para indicar cantidades.</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:decimal">
+			<xs:pattern value="\d*\.\d{2,6}"/>
+			<xs:minExclusive value="0"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:complexType name="InfoAdicional">
+		<xs:annotation>
+			<xs:documentation>Tipo de elemento que contiene informacion adicional relevante.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Info" minOccurs="1" maxOccurs="unbounded">
+				<xs:annotation>
+					<xs:documentation>Elemento que describe la informacion adicional.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="Name" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Nombre o identificador de la información a agregar.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Data" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Dato adicional de la información a agregar.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Valor que corresponde al Name/Nombre de la informacion a agregar.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute type="xs:string" name="Name"/>
+		<xs:attribute type="xs:integer" name="Id"/>
+	</xs:complexType>
+
+	<xs:complexType name="CodesType">
+		<xs:annotation>
+			<xs:documentation>Tipo de elemento que contiene informacion sobre tipos de codigos.</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Code" minOccurs="1" maxOccurs="5">
+				<xs:annotation>
+					<xs:documentation>Elemento que describe la informacion del codigo.</xs:documentation>
+				</xs:annotation>
+				<xs:complexType>
+					<xs:attribute name="Name" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Nombre o identificador de la información a agregar.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Data" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Dato adicional de la información a agregar.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+					<xs:attribute name="Value" type="xs:string">
+						<xs:annotation>
+							<xs:documentation>Valor que corresponde al Name/Nombre de la informacion a agregar.</xs:documentation>
+						</xs:annotation>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:complexType name="TransactionsType">
+		<xs:annotation>
+			<xs:documentation>Tipo de elemento que contiene información monetaria (impuestos, descuentos, cargos, etc.)</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Code" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Codigo de la información.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Description" type="xs:string" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Descripción de la información.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="TaxableAmount" type="Money" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Valor sobre el cual se impone el impuesto.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="ChargableAmount" type="Money" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Valor sobre el cual se impone el cargo.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Rate" type="Money" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Tasa a aplicar.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+			<xs:element name="Amount" type="Money" maxOccurs="1" minOccurs="0">
+				<xs:annotation>
+					<xs:documentation>Monto total resultante.</xs:documentation>
+				</xs:annotation>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

@@ -9,7 +9,7 @@ from brainfel.services.xml_builder_fact_cf import build_fact_cf
 
 # Mock dataset row
 mock_row = {
-    "DatosGenerales_Tipo": "FACT",
+    "DatosGenerales_Tipo": "FCAM",
     "DatosGenerales_FechaHoraEmision": "2023-10-27 12:00:00",
     "DatosGenerales_CodigoMoneda": "GTQ",
     "Emisor_NITEmisor": "12345678",
@@ -23,7 +23,10 @@ mock_row = {
     "Items_Cantidad": 1,
     "Items_Price": 100,
     "Items_Total": 100,
-    "Frases_Escenarios": "" # Empty to test default fallback to 1|2
+    "Frases_Escenarios": "",
+    "Complementos_AbonosFacturaCambiaria_NumeroAbono": "1",
+    "Complementos_AbonosFacturaCambiaria_FechaVencimiento": "2023-11-27",
+    "Complementos_AbonosFacturaCambiaria_MontoAbono": 100
 }
 
 print("Invoking build_fact_cf...")

@@ -1,0 +1,97 @@
+4.2.7
+
+Campos que describen información adicional sobre la transacción documentada
+
+C
+
+ID
+
+Campo
+
+F
+
+F01
+
+AdditionalDocumentInfo
+
+Descripción
+Grupo de datos que contiene
+información adicional sobre la
+factura electrónica
+
+P
+
+T
+
+R01
+
+G
+
+Tam
+
+Ocu
+
+Observaciones
+
+1-1
+Elemento que contiene información sobre
+Complementos y la Adenda.
+
+F
+
+F02
+
+AdditionalInfo
+
+Grupo que contiene información
+adicional
+
+F01
+
+G
+
+0-20
+
+Si se desea agregar información sobre un
+Complemento, únicamente se agregarán los
+datos necesarios para ese complemento. Y si se
+desea agregar información sobre la Adenda, es
+necesario crear otro elemento AdditionlInfo y
+únicamente se deben agregar los datos
+necesarios para la Adenda.
+Se debe agregar un elemento AdditionlInfo para
+cada Complemento y la Adenda debe estar solo
+una vez.
+Complementos: Elemento que contiene la
+información del complemento que se agregará.
+Los valores que se admiten son
+
+F
+
+F03
+
+Code
+
+Codigo de clasificacion
+
+F02
+
+A
+
+1-100
+
+1-1
+
+EXP: Exportaciones
+FCAMB: Factura Cambiaria
+FESP: Factura Especial
+NDEB: Nota de Débito
+NCRE: Nota de Crédito
+CCA: Cobro por cuenta ajena
+ESPECT: Espectáculos Públicos
+REFCONST: Referencias de constancia
+FEPE: Factura Específica
+
+25
+
+

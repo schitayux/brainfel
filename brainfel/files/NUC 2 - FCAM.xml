@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Root>
+    <Version>1.00</Version>
+    <CountryCode>GT</CountryCode>
+    <Header>
+        <DocType>FCAM</DocType> <!-- DatosGenerales@Tipo-->
+        <IssuedDateTime>2022-07-01T14:46:00-06:00</IssuedDateTime> <!-- DatosGenerales@FechaHoraEmision --> 
+        <Currency>GTQ</Currency> <!-- DatosGenerales@CodigoMoneda  -->  
+    </Header>
+    
+    <Seller>
+        <TaxID>123456</TaxID> <!-- Emisor@NITEmisor -->
+        <TaxIDAdditionalInfo>
+            <Info Name="AfiliacionIVA" Value="GEN"/> <!-- Emisor@AfiliacionIVA -->
+        </TaxIDAdditionalInfo>
+        <Name>FEL TEST</Name> <!-- Emisor@NombreEmisor -->
+        <AdditionlInfo> <!-- FRASES -->
+            <Info Name="TipoFrase" Data="1" Value="1"/>
+            <Info Name="Escenario" Data="1" Value="1"/>
+        </AdditionlInfo>
+        <BranchInfo>
+            <Code>1</Code> <!-- Emisor@CodigoEstablecimiento -->
+            <Name>ESTABLECIMIENTO DE PRUEBA</Name> <!-- Emisor@NombreComercial -->
+            <AddressInfo> <!-- DireccionEmisor -->
+                <Address>4 AVENIDA 15-70 ZONA 10 LOCAL 3 EDIFICIO PALADIUM</Address> <!-- Direccion -->
+                <City>01001</City>      <!-- CodigoPostal -->
+                <District>Guatemala</District>  <!-- Municipio -->
+                <State>Guatemala</State>   <!-- Departamento -->
+                <Country>GT</Country>       <!-- Pais -->
+            </AddressInfo>
+        </BranchInfo>
+    </Seller>
+    
+    <Buyer>
+        <TaxID>77454820</TaxID> <!-- Receptor@IDReceptor -->
+        <!-- si la casilla IDReceptor contiene el NIT, debe contener el nombre asociado al NIT, caso contrario puede ser cualquier cosa -->
+        <Name>DIGIFACT SERVICIOS SOCIEDAD ANONIMA</Name> <!-- Receptor@NombreReceptor -->
+        <Contact>
+            <EmailList>
+                <Email>correo@digifact.com.gt</Email> <!-- Receptor@CorreoReceptor -->
+            </EmailList>
+        </Contact>
+        <!-- <AdditionlInfo></AdditionlInfo> -->
+        <AddressInfo>   <!-- DireccionReceptor -->
+            <Address>4ta avenida 15-70 zona 10</Address>        <!-- Direccion -->
+            <City>01010</City>          <!-- CodigoPostal -->
+            <District>GUATEMALA</District>  <!-- Municipio -->
+            <State>GUATEMALA</State>        <!-- Departamento -->
+            <Country>GT</Country>    <!-- Pais -->
+        </AddressInfo>
+    </Buyer>
+
+    <Items>
+        <Item>
+            <Type>Servicio</Type> <!-- Item@BienOServicio -->
+            <Description>prueba</Description> <!-- Descripcion -->
+            <Qty>1.000000</Qty> <!-- Cantidad -->
+            <UnitOfMeasure>SER</UnitOfMeasure> <!-- UnidadMedida -->
+            <Price>30.000000</Price> <!-- PrecioUnitario | precio sin impuesto -->
+            <Discounts> 
+                <Discount>
+                    <Amount>0.00</Amount> <!-- Descuento -->
+                </Discount>
+            </Discounts>
+            <Taxes> <!-- Impuestos -->
+                <Tax> <!-- Impuesto -->
+                    <Code>1</Code>  <!-- CodigoUnidadGravable -->
+                    <Description>IVA</Description> <!-- NombreCorto -->
+                    <TaxableAmount>26.7857</TaxableAmount> <!-- MontoGravable -->
+                    <!-- <ChargableAmount>22</ChargableAmount> -->   <!-- CantidadUnidadesGravables -->
+                    <Amount>3.2143</Amount> <!-- MontoImpuesto -->
+                </Tax>
+            </Taxes>
+            <Totals> <!-- Total -->
+                <TotalItem>30.000000</TotalItem> <!-- Total -->
+            </Totals>
+        </Item>
+    </Items>
+    
+    <Totals> <!-- Totales -->
+        <TotalTaxes> <!-- TotalImpuestos -->
+            <TotalTax>  <!-- TotalImpuesto -->
+                <Description>IVA</Description>  <!-- TotalImpuesto@NombreCorto -->
+                <Amount>3.2143</Amount>      <!-- TotalImpuesto@TotalMontoImpuesto -->
+            </TotalTax>
+        </TotalTaxes>
+        <GrandTotal>
+            <InvoiceTotal>30.000000</InvoiceTotal> <!-- GranTotal -->
+        </GrandTotal>
+        <!-- <InWords></InWords> -->
+    </Totals>
+    
+    <AdditionalDocumentInfo>
+        <!-- COMPLEMENTO -->
+        <AdditionalInfo>
+            <Code>FCAMB</Code> <!-- Complemento@NombreComplemento -->
+            <Type>COMPLEMENTO</Type> <!-- Complemento que ira luego del nodo Totales --> 
+            <AditionalData>
+                <Data>
+                    <Info Name="NumeroAbono" Value="1"/>
+                    <Info Name="FechaVencimiento" Value="2022-07-10"/>
+                    <Info Name="MontoAbono" Value="30.00"/>
+                </Data>
+            </AditionalData>
+        </AdditionalInfo>
+
+        <!-- ADENDA -->
+        <AdditionalInfo>
+            <Code>FRONT-7219-4675-9726-F98B4B7472D62</Code> <!-- REFERENCIA_INTERNA -->
+            <Type>ADENDA</Type>
+            <AditionalData>
+                <!-- INFORMACION_ADICIONAL -->
+                <Data Name="INFORMACION_ADICIONAL">
+                    <Info Name="OBSERVACIONES" Value="-"/>
+                    <Info Name="CANTIDAD_LETRAS" Value="TREINTA QUETZALES CON 00/100"/>
+                </Data>
+                <!-- Detalles_Auxiliares, pueden venir muchos DetallesAux_Detalle-->
+                <Data Name="DetallesAux_Detalle">
+                    <Info Name="NumeroLinea" Value="1"/>
+                    <Info Name="Descripcion_Adicional" Value="-"/>
+                    <Info Name="CodigoEAN" Value="000111"/>
+                    <Info Name="CategoriaAdicional" Value="-"/>
+                </Data>
+            </AditionalData>
+            <AditionalInfo>
+                <Info Name="VALIDAR_REFERENCIA_INTERNA" Value="NO_VALIDAR"/>
+            </AditionalInfo>
+        </AdditionalInfo>
+    </AdditionalDocumentInfo>
+</Root>
