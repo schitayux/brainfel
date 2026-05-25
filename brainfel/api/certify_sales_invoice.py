@@ -8,8 +8,21 @@ from brainfel.sql.executor import run_sql_function
 from brainfel.services.xml_builder_fact_cf import build_fact_cf as build_xml_from_dataset
 from brainfel.services.xml_builder_fcam_sat import build_fcam_sat_xml
 from brainfel.services.token_service import get_digifact_token
-from brainfel.services.digifact_client import certify_xml, cancel_fel_document
+from brainfel.services.digifact_client import certify_xml as digifact_certify_xml, cancel_fel_document as digifact_cancel_fel_document
+from brainfel.services import totaldoc_client
 from brainfel.services.bfel_log_service import create_bfel_log
+
+@frappe.whitelist()
+def debug_last_log():
+    logs = frappe.get_all("BFEL Log", order_by="creation desc", limit=1)
+    if logs:
+        log = frappe.get_doc("BFEL Log", logs[0].name)
+        print("KEYS:", list(log.as_dict().keys()))
+        print("RAW TEXT (first 300):", (getattr(log, "raw_text", "") or "")[:300])
+        print("RESPONSE DATA:", getattr(log, "response_data", ""))
+        print("REQUEST DATA:", getattr(log, "request_data", ""))
+    else:
+        print("No logs")
 
 
 # ----------------------------------------------------------------------
@@ -94,7 +107,7 @@ def certify_sales_invoice(sales_invoice_name: str, force_test_mode: int = 0, mot
         frappe.throw("Este documento ya fue certificado FEL (bfel_uuid existe).")
 
     settings = _load_settings_for_company(si.company)
-    test_mode = bool(force_test_mode) or bool(getattr(settings, "test_mode", 0))
+    test_mode = bool(force_test_mode) or (getattr(settings, "test_mode", "N") == "Y")
 
     # ------------------------------------------------------------------
     # 1) Dataset SQL
@@ -135,7 +148,12 @@ def certify_sales_invoice(sales_invoice_name: str, force_test_mode: int = 0, mot
     # ------------------------------------------------------------------
     # 2) XML
     # ------------------------------------------------------------------
-    xml_info = build_xml_from_dataset(dataset)
+    if settings.certifier == "Grupo CDS":
+        from brainfel.services.totaldoc_xml_builder import build_totaldoc_xml
+        xml_info = build_totaldoc_xml(dataset, settings)
+    else:
+        xml_info = build_xml_from_dataset(dataset)
+        
     xml_payload = (xml_info or {}).get("xml") or ""
 
     if not xml_payload.strip():
@@ -163,13 +181,22 @@ def certify_sales_invoice(sales_invoice_name: str, force_test_mode: int = 0, mot
     # 3) Token + Certificación
     # ------------------------------------------------------------------
     try:
-        token = get_digifact_token(settings, test_mode)
-        response = certify_xml(
-            settings=settings,
-            xml_payload=xml_payload,
-            token=token,
-            test_mode=test_mode,
-        )
+        if settings.certifier == "Grupo CDS":
+            response = totaldoc_client.certify_xml(
+                settings=settings,
+                xml_payload=xml_payload,
+                test_mode=test_mode,
+                document_name=sales_invoice_name,
+            )
+            token = ""
+        else:
+            token = get_digifact_token(settings, test_mode)
+            response = digifact_certify_xml(
+                settings=settings,
+                xml_payload=xml_payload,
+                token=token,
+                test_mode=test_mode,
+            )
     except Exception as e:
         msg = str(e) or "Error técnico al certificar FEL."
 
@@ -314,28 +341,37 @@ def cancel_sales_invoice_fel(sales_invoice_name: str, motivo_anulacion: str, for
         return {"success": True, "message": "Ya estaba anulado en FEL."}
 
     settings = _load_settings_for_company(si.company)
-    test_mode = bool(force_test_mode) or bool(getattr(settings, "test_mode", 0))
+    test_mode = bool(force_test_mode) or (getattr(settings, "test_mode", "N") == "Y")
     
     # ------------------------------------------------------------------
     # Token + Anulación
     # ------------------------------------------------------------------
     try:
-        token = get_digifact_token(settings, test_mode)
-        
         buyer_nit = getattr(si, "tax_id", "") or "CF"
         issue_date = getattr(si, "bfel_fechacertificacion", "")
         if not issue_date:
             issue_date = getattr(si, "posting_date", "")
             
-        response = cancel_fel_document(
-            settings=settings,
-            token=token,
-            test_mode=test_mode,
-            doc_uuid=si.bfel_uuid,
-            buyer_nit=buyer_nit,
-            issue_date=str(issue_date),
-            motivo_anulacion=motivo_anulacion
-        )
+        if settings.certifier == "Grupo CDS":
+            response = totaldoc_client.cancel_fel_document(
+                settings=settings,
+                test_mode=test_mode,
+                doc_uuid=si.bfel_uuid,
+                buyer_nit=buyer_nit,
+                issue_date=str(issue_date),
+                motivo_anulacion=motivo_anulacion
+            )
+        else:
+            token = get_digifact_token(settings, test_mode)
+            response = digifact_cancel_fel_document(
+                settings=settings,
+                token=token,
+                test_mode=test_mode,
+                doc_uuid=si.bfel_uuid,
+                buyer_nit=buyer_nit,
+                issue_date=str(issue_date),
+                motivo_anulacion=motivo_anulacion
+            )
     except Exception as e:
         msg = str(e) or "Error técnico al anular FEL."
         
@@ -414,14 +450,48 @@ def cancel_sales_invoice_fel(sales_invoice_name: str, motivo_anulacion: str, for
 
 def download_and_attach_document(si_name: str, uuid: str, token: str, settings, test_mode: bool):
     """
-    Descarga el PDF/XML desde Digifact y lo adjunta a la factura con un comentario.
+    Descarga el PDF/XML desde el certificador y lo adjunta a la factura con un comentario.
     """
     import requests
     import base64
-    from brainfel.services.digifact_client import _base_url, _nit_12
 
     try:
         si = frappe.get_doc("Sales Invoice", si_name)
+        
+        if settings.certifier == "Grupo CDS":
+            url_pdf_setting = getattr(settings, "url_pdf", None)
+            if url_pdf_setting:
+                url_pdf = f"{url_pdf_setting}{uuid}"
+            else:
+                domain = "print-dev.totaldoc.io" if test_mode else "print.totaldoc.io"
+                url_pdf = f"https://{domain}/pdf?uuid={uuid}"
+            
+            r = requests.get(url_pdf, timeout=60)
+            if r.status_code == 200:
+                # Silenciado - Solo log en consola
+                print("Se descargó el PDF de Total Doc. Adjuntando...")
+                file_doc = frappe.get_doc({
+                    "doctype": "File",
+                    "file_name": f"FEL_{si.name}_{uuid}.pdf",
+                    "attached_to_doctype": "Sales Invoice",
+                    "attached_to_name": si.name,
+                    "content": r.content,
+                    "is_private": 0
+                })
+                file_doc.save(ignore_permissions=True)
+                
+                frappe.get_doc({
+                    "doctype": "Comment",
+                    "comment_type": "Comment",
+                    "reference_doctype": "Sales Invoice",
+                    "reference_name": si.name,
+                    "content": f"Documento FEL PDF Certificado: <a href='{file_doc.file_url}' target='_blank'>Descargar PDF</a>"
+                }).insert(ignore_permissions=True)
+            else:
+                frappe.log_error(title="Error al descargar PDF de Total Doc", message=f"{r.status_code} - {r.text[:200]}")
+            return
+            
+        from brainfel.services.digifact_client import _base_url, _nit_12
         base = _base_url(settings, test_mode)
         url = f"{base}/api/GetDocument"
 
@@ -439,8 +509,8 @@ def download_and_attach_document(si_name: str, uuid: str, token: str, settings, 
 
         r = requests.get(url, params=params, headers=headers, timeout=60)
 
-        # DEBUG: Mostrar al usuario el resultado crudo del API
-        frappe.msgprint(f"Status API GetDocument: {r.status_code}")
+        # DEBUG: Log silencioso
+        print(f"Status API GetDocument: {r.status_code}")
         
         if r.status_code == 200:
             resp = r.json()
@@ -448,7 +518,7 @@ def download_and_attach_document(si_name: str, uuid: str, token: str, settings, 
             # ResponseDATA3 suele ser el PDF en Base64
             b64_pdf = resp.get("ResponseDATA3")
             if b64_pdf:
-                frappe.msgprint("Se encontró el PDF en ResponseDATA3. Adjuntando...")
+                print("Se encontró el PDF en ResponseDATA3. Adjuntando...")
                 file_doc = frappe.get_doc({
                     "doctype": "File",
                     "file_name": f"FEL_{si.name}_{uuid}.pdf",
@@ -489,10 +559,9 @@ def download_and_attach_document(si_name: str, uuid: str, token: str, settings, 
                 }).insert(ignore_permissions=True)
             
             if not b64_pdf and not b64_xml:
-                frappe.msgprint(f"El API respondió 200 OK pero no devolvió PDF ni XML. Respuesta cruda: {r.text[:500]}")
+                frappe.log_error(title="Error Digifact GetDocument", message=f"El API respondió 200 OK pero no devolvió PDF ni XML. Respuesta cruda: {r.text[:500]}")
         else:
-            frappe.msgprint(f"Error al descargar: {r.text[:500]}", title="Error Digifact")
+            frappe.log_error(title="Error al descargar PDF de Digifact", message=f"{r.text[:500]}")
 
     except Exception as e:
         frappe.log_error(title=f"Error descargando documento FEL para {si_name}", message=frappe.get_traceback())
-        frappe.msgprint(f"Ocurrió un error interno al descargar: {str(e)}")

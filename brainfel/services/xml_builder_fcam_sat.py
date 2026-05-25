@@ -380,7 +380,18 @@ def build_fcam_sat_xml(rows: List[Dict[str, Any]]) -> Dict[str, str]:
     total_impuestos = 0.0
     gran_total = 0.0
 
-    for idx, r in enumerate(rows, start=1):
+    # Deduplicate items to avoid duplicate detail lines
+    unique_items = []
+    seen_items = set()
+    for r in rows:
+        line_no = txt(r.get("Items_NumeroLinea"))
+        if not line_no:
+            line_no = f"{txt(r.get('Items_Descripcion'))}-{qty(r.get('Items_Cantidad'))}-{money(r.get('Items_PrecioUnitario'))}"
+        if line_no not in seen_items:
+            seen_items.add(line_no)
+            unique_items.append(r)
+
+    for idx, r in enumerate(unique_items, start=1):
 
         bien_o_servicio = txt(
             r.get("Items_BienOServicio"),

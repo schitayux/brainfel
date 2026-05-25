@@ -186,7 +186,18 @@ def build_xml_from_dataset(dataset: List[Dict[str, Any]]) -> Dict[str, str]:
     # Items
     items_node = SubElement(datos_emision, "dte:Items")
 
+    # Deduplicate items to avoid duplicate detail lines
+    unique_items = []
+    seen_items = set()
     for row in dataset:
+        num_linea = _norm_str(row.get("Items_NumeroLinea"))
+        if not num_linea:
+            num_linea = f"{_norm_str(row.get('Items_Descripcion'))}-{_fmt_num(row.get('Items_Cantidad'))}-{_fmt_num(row.get('Items_PrecioUnitario'))}"
+        if num_linea not in seen_items:
+            seen_items.add(num_linea)
+            unique_items.append(row)
+
+    for row in unique_items:
         num_linea = _norm_str(row.get("Items_NumeroLinea"))
         if not num_linea:
             continue
@@ -219,7 +230,7 @@ def build_xml_from_dataset(dataset: List[Dict[str, Any]]) -> Dict[str, str]:
 
     total_iva = _norm_str(h.get("Totales_TotalIVA_TotalMontoImpuesto"))
     if not total_iva:
-        total_iva_val = sum(_to_decimal(r.get("Items_IVA_MontoImpuesto")) for r in dataset)
+        total_iva_val = sum(_to_decimal(r.get("Items_IVA_MontoImpuesto")) for r in unique_items)
         total_iva = _fmt_num(total_iva_val, 6)
 
     SubElement(total_impuestos, "dte:TotalImpuesto", {
@@ -229,7 +240,7 @@ def build_xml_from_dataset(dataset: List[Dict[str, Any]]) -> Dict[str, str]:
 
     gran_total = _norm_str(h.get("Totales_GranTotal"))
     if not gran_total:
-        gt_val = sum(_to_decimal(r.get("Items_Total")) for r in dataset)
+        gt_val = sum(_to_decimal(r.get("Items_Total")) for r in unique_items)
         gran_total = _fmt_num(gt_val, 6)
 
     SubElement(totales, "dte:GranTotal").text = _fmt_num(gran_total, 6)

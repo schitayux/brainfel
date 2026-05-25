@@ -1,7 +1,7 @@
 {
  "actions": [],
  "creation": "2026-01-25 00:37:43.692921",
- "description": "Configuraci\u00f3n general del m\u00f3dulo BrainFEL para Facturaci\u00f3n Electr\u00f3nica FEL.",
+ "description": "Configuración general del módulo BrainFEL para Facturación Electrónica FEL.",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -9,7 +9,7 @@
   "enabled",
   "certifier",
   "user",
-  "contrase\u00f1a_certificador",
+  "contraseña_certificador",
   "timeout_ms",
   "test_mode",
   "generate_xml",
@@ -47,6 +47,7 @@
   "url_anular",
   "url_ncred",
   "url_firma",
+  "url_pdf",
   "funciones_sql_tab",
   "sql_func_certificar",
   "sql_func_anular"
@@ -216,12 +217,12 @@
   {
    "fieldname": "direccionemisor",
    "fieldtype": "Data",
-   "label": "Direcci\u00f3n"
+   "label": "Dirección"
   },
   {
    "fieldname": "codigopostalemisor",
    "fieldtype": "Data",
-   "label": "C\u00f3digo Postal"
+   "label": "Código Postal"
   },
   {
    "fieldname": "municipioemisor",
@@ -236,7 +237,7 @@
   {
    "fieldname": "paisemisor",
    "fieldtype": "Link",
-   "label": "Pa\u00eds",
+   "label": "País",
    "options": "Country"
   },
   {
@@ -250,15 +251,15 @@
    "label": "usuario Certificador"
   },
   {
-   "fieldname": "contrase\u00f1a_certificador",
+   "fieldname": "contraseña_certificador",
    "fieldtype": "Data",
-   "label": "contrase\u00f1a certificador"
+   "label": "contraseña certificador"
   },
   {
    "fieldname": "certifier",
    "fieldtype": "Select",
    "label": "Certificador",
-   "options": "Digifact\nMegaprint\nGuatefacturas"
+   "options": "Digifact\nMegaprint\nGuatefacturas\nGrupo CDS"
   },
   {
    "default": "0",
@@ -282,6 +283,12 @@
    "label": "URL Nota Credito"
   },
   {
+   "default": "https://print-dev.totaldoc.io/pdf?uuid=",
+   "fieldname": "url_pdf",
+   "fieldtype": "Data",
+   "label": "URL PDF"
+  },
+  {
    "fieldname": "responsedata",
    "fieldtype": "Select",
    "label": "Formato x Defecto",
@@ -289,7 +296,7 @@
   }
  ],
  "links": [],
- "modified": "2026-01-27 22:51:05.807544",
+ "modified": "2026-05-19 00:52:56.648289",
  "modified_by": "Administrator",
  "module": "Brain FEL",
  "name": "BFEL Settings",

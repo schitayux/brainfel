@@ -87,10 +87,9 @@ doctype_js = {"Sales Invoice" : "public/js/sales_invoice.js"}
 # ----------
 
 # add methods and filters to jinja environment
-# jinja = {
-# 	"methods": "brainfel.utils.jinja_methods",
-# 	"filters": "brainfel.utils.jinja_filters"
-# }
+jinja = {
+    "methods": ["brainfel.utils.jinja_methods.get_qr_base64"],
+}
 
 # Installation
 # ------------

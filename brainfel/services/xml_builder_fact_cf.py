@@ -223,7 +223,18 @@ def build_fact_cf(rows: List[Dict[str, Any]]) -> Dict[str, str]:
     taxes_summary = {} # Group taxes by code for the footer
     grand_total = 0.0
 
+    # Deduplicate items to avoid duplicate detail lines
+    unique_items = []
+    seen_items = set()
     for r in rows:
+        line_no = txt(r.get("Items_NumeroLinea"))
+        if not line_no:
+            line_no = f"{txt(r.get('Items_Descripcion'))}-{qty(r.get('Items_Cantidad'))}-{money(r.get('Items_PrecioUnitario'))}"
+        if line_no not in seen_items:
+            seen_items.add(line_no)
+            unique_items.append(r)
+
+    for r in unique_items:
         item = SubElement(items, "Item")
 
         # Bien o Servicio

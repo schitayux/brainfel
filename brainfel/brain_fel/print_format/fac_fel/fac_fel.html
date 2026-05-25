@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>FAC FEL</title>
+<style>
+
+/* ============================================================ */
+/* VARIABLES - PALETA SOLYMAR / CHAPPSA                         */
+/* ============================================================ */
+
+:root {
+  --blue:       #1a3a5c;
+  --yellow:     #c68b00;
+  --soft:       #f8f9fa;
+  --soft-blue:  #f0f4f8;
+  --border:     #dee2e6;
+  --text:       #212529;
+  --muted:      #6c757d;
+}
+
+/* ============================================================ */
+/* BASE                                                          */
+/* ============================================================ */
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: 'Courier New', 'Lucida Sans Typewriter', monospace;
+  font-size: 10px;
+  color: var(--text);
+  line-height: 1.4;
+  padding: 15px;
+  background: white;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* ============================================================ */
+/* HEADER                                                        */
+/* ============================================================ */
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 15px;
+  border-bottom: 2px solid var(--blue);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+
+.header-left {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+.logo { height: 52px; width: auto; }
+
+.company-info { font-size: 9px; line-height: 1.35; }
+
+.company-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-bottom: 3px;
+  letter-spacing: 1px;
+}
+
+.header-right { text-align: right; }
+
+.fel-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #333;
+  line-height: 1;
+  letter-spacing: 2px;
+}
+
+.fel-subtitle {
+  font-size: 8px;
+  font-weight: 600;
+  margin-top: 3px;
+  color: var(--muted);
+  letter-spacing: 0.5px;
+}
+
+.fel-badge {
+  display: inline-block;
+  margin-top: 5px;
+  padding: 2px 8px;
+  font-size: 7px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: var(--blue);
+  color: white;
+}
+
+.fel-badge.estado-draft    { background: #b45309; }
+.fel-badge.estado-interno  { background: #4b5563; }
+
+.invoice-ref {
+  margin-top: 5px;
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* ============================================================ */
+/* DIVIDER                                                       */
+/* ============================================================ */
+
+.divider {
+  border-top: 1px solid var(--blue);
+  margin: 8px 0;
+}
+
+/* ============================================================ */
+/* SECTION TITLE                                                 */
+/* ============================================================ */
+
+.section-title {
+  background: var(--soft);
+  border-left: 3px solid var(--yellow);
+  padding: 5px 8px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-top: 12px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================ */
+/* GRIDS DE INFORMACIÓN                                          */
+/* ============================================================ */
+
+.client-grid,
+.doc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.info-box,
+.doc-item {
+  border: 1px solid var(--border);
+  padding: 5px 7px;
+  background: white;
+}
+
+.info-box.full,
+.doc-item.uuid-item {
+  grid-column: 1 / -1;
+}
+
+.doc-item.uuid-item {
+  background: var(--soft-blue);
+  border-color: var(--blue);
+}
+
+.label,
+.doc-label {
+  font-size: 7px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.value,
+.doc-value {
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.uuid-value {
+  font-size: 8px;
+  color: var(--blue);
+  font-weight: 700;
+  word-break: break-all;
+  letter-spacing: 0.3px;
+}
+
+/* ============================================================ */
+/* TABLA DE ITEMS                                                */
+/* ============================================================ */
+
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 5px;
+  font-size: 9px;
+}
+
+.items-table thead th {
+  background: var(--blue);
+  color: white;
+  padding: 6px 5px;
+  font-size: 8px;
+  text-align: left;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.items-table thead th.money-col { text-align: right; }
+
+.items-table tbody td {
+  border-bottom: 1px solid var(--border);
+  padding: 5px;
+  vertical-align: top;
+}
+
+.items-table tbody tr:nth-child(even) td { background: var(--soft); }
+
+.qty-col   { width: 52px;  text-align: center; }
+.money-col { width: 105px; text-align: right;  }
+
+.item-name { font-weight: 600; }
+
+.item-description {
+  font-size: 7px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+/* ============================================================ */
+/* TOTALES                                                       */
+/* ============================================================ */
+
+.total-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.total-box {
+  min-width: 230px;
+  background: var(--blue);
+  padding: 8px 12px;
+  color: white;
+  text-align: right;
+}
+
+.total-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.total-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--yellow);
+  margin-top: 2px;
+}
+
+.letters-box {
+  margin-top: 8px;
+  border-left: 3px solid var(--yellow);
+  padding: 4px 8px;
+  background: var(--soft);
+}
+
+.letters-label {
+  font-weight: 700;
+  color: var(--muted);
+  font-size: 7px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 4px;
+}
+
+.letters-value { font-weight: 600; font-size: 9px; }
+
+/* ============================================================ */
+/* SECCIÓN QR - SOLO DOCUMENTOS CERTIFICADOS                    */
+/* ============================================================ */
+
+.qr-section {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-top: 14px;
+  padding: 10px 12px;
+  border: 2px solid var(--blue);
+  background: var(--soft-blue);
+}
+
+.qr-left { flex-shrink: 0; text-align: center; }
+
+.qr-img {
+  display: block;
+  width: 130px;
+  height: 130px;
+  border: 3px solid white;
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.qr-label {
+  font-size: 7px;
+  font-weight: 700;
+  color: var(--blue);
+  margin-top: 4px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.qr-sat-domain {
+  font-size: 6px;
+  color: var(--muted);
+  margin-top: 1px;
+}
+
+.qr-right { flex: 1; }
+
+.qr-right-title {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--blue);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--border);
+}
+
+.qr-row { margin-bottom: 5px; }
+
+.qr-row-label {
+  font-size: 7px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: block;
+  margin-bottom: 1px;
+}
+
+.qr-row-value {
+  font-size: 8px;
+  font-weight: 600;
+  color: var(--text);
+  word-break: break-all;
+}
+
+.qr-row-value.uuid {
+  font-size: 7.5px;
+  color: var(--blue);
+  letter-spacing: 0.2px;
+}
+
+.qr-disclaimer {
+  margin-top: 10px;
+  font-size: 7px;
+  color: var(--muted);
+  line-height: 1.45;
+  border-top: 1px dashed var(--border);
+  padding-top: 5px;
+}
+
+/* ============================================================ */
+/* AVISOS DE ESTADO                                              */
+/* ============================================================ */
+
+.notice-draft {
+  margin-top: 12px;
+  padding: 8px 12px;
+  background: #fef3c7;
+  border: 1px solid #d97706;
+  border-left: 4px solid #b45309;
+  font-size: 9px;
+  color: #78350f;
+  font-weight: 600;
+}
+
+.notice-interno {
+  margin-top: 12px;
+  padding: 6px 10px;
+  background: var(--soft);
+  border-left: 3px solid var(--muted);
+  font-size: 8px;
+  color: var(--muted);
+}
+
+/* ============================================================ */
+/* NOTAS                                                         */
+/* ============================================================ */
+
+.notes-box {
+  margin-top: 10px;
+  font-size: 7px;
+  line-height: 1.4;
+  border-top: 1px solid var(--border);
+  padding-top: 6px;
+  color: var(--muted);
+}
+
+/* ============================================================ */
+/* FOOTER                                                        */
+/* ============================================================ */
+
+.footer {
+  margin-top: 15px;
+  text-align: center;
+  font-size: 7px;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.footer-small { margin-top: 2px; font-size: 6px; }
+
+/* ============================================================ */
+/* WATERMARKS                                                    */
+/* ============================================================ */
+
+.watermark {
+  position: fixed;
+  top: 40%;
+  left: 10%;
+  width: 80%;
+  text-align: center;
+  font-size: 60px;
+  font-weight: 700;
+  opacity: 0.07;
+  z-index: 999;
+  pointer-events: none;
+  text-transform: uppercase;
+}
+
+.wm-cancelada   { color: #c62828; }
+.wm-anulada-fel { color: #111; transform: rotate(-45deg); top: 50%; opacity: 0.05; }
+.wm-borrador    { color: #b45309; font-size: 68px; }
+
+/* ============================================================ */
+/* ERROR                                                         */
+/* ============================================================ */
+
+.fel-error {
+  padding: 30px 20px;
+  text-align: center;
+  font-size: 15px;
+  color: #c62828;
+  font-weight: 700;
+  line-height: 1.6;
+}
+
+.fel-error small {
+  display: block;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 5px;
+}
+
+</style>
+</head>
+<body>
+
+{# ============================================================= #}
+{# RESOLUCIÓN DE CONTEXTO FEL                                    #}
+{# ============================================================= #}
+
+{% set si          = doc %}
+{% set bfel_raw    = si.bfel_status or '' %}
+{% set bfel_code   = bfel_raw[:2] %}
+{% set is_certified = bfel_code == '02' %}
+{% set is_no_enviar = bfel_code == '00' %}
+{% set is_draft     = si.docstatus == 0 %}
+{% set is_cancelled = si.docstatus == 2 %}
+
+{% set serie_prefix = (si.name or '')[:4] %}
+
+{% set bdm_list = frappe.get_all(
+    "BFEL Document Map",
+    filters={"type_docdte": serie_prefix},
+    fields=["name","fel_document_type","bfel_settings","notes"],
+    limit=1
+) %}
+
+{# ============================================================= #}
+{# GUARDIA: sin configuración FEL                                #}
+{# ============================================================= #}
+
+{% if not bdm_list %}
+
+<div class="fel-error">
+  ESTE DOCUMENTO NO TIENE CONFIGURACIÓN FEL
+  <small>Serie buscada: {{ serie_prefix }}</small>
+</div>
+
+{# ============================================================= #}
+{# GUARDIA: estado no reconocido (ej. 01 Enviar / 03 No Proc.)   #}
+{# ============================================================= #}
+
+{% elif not is_certified and not is_no_enviar and not is_cancelled %}
+
+<div class="fel-error">
+  DOCUMENTO FEL NO CERTIFICADO
+  <small>Estado actual: {{ bfel_raw or '(sin estado)' }}</small>
+</div>
+
+{% else %}
+
+{% set bdm = frappe.get_doc("BFEL Document Map", bdm_list[0].name) %}
+{% set bs  = frappe.get_doc("BFEL Settings",     bdm.bfel_settings) %}
+
+{# ============================================================= #}
+{# WATERMARKS                                                     #}
+{# ============================================================= #}
+
+{% if is_cancelled %}
+<div class="watermark wm-cancelada">CANCELADA</div>
+{% endif %}
+
+{% if is_cancelled and si.bfel_documento_anulado == 1 %}
+<div class="watermark wm-anulada-fel">ANULADA FEL</div>
+{% endif %}
+
+{% if is_no_enviar and is_draft %}
+<div class="watermark wm-borrador">EN BORRADOR</div>
+{% endif %}
+
+{# ============================================================= #}
+{# HEADER                                                         #}
+{# ============================================================= #}
+
+<div class="header">
+
+  <div class="header-left">
+
+    {% set lh_name = frappe.db.get_value("Company", bs.company, "default_letter_head") %}
+    {% if lh_name %}
+      {% set lh = frappe.get_doc("Letter Head", lh_name) %}
+      {% if lh.image %}
+        <img src="{{ lh.image }}" class="logo" alt="Logo">
+      {% endif %}
+    {% endif %}
+
+    <div class="company-info">
+      <div class="company-name">{{ bs.company }}</div>
+      <div>NIT: {{ bs.company_nit }}</div>
+      <div>{{ frappe.db.get_value("Company", bs.company, "company_name") or '' }}</div>
+      <div>{{ frappe.db.get_value("Company", bs.company, "email") or '' }}</div>
+      <div>{{ frappe.db.get_value("Company", bs.company, "phone_no") or '' }}</div>
+    </div>
+
+  </div>
+
+  <div class="header-right">
+
+    <div class="fel-title">{{ bdm.fel_document_type | upper }}</div>
+    <div class="fel-subtitle">DOCUMENTO TRIBUTARIO ELECTRÓNICO</div>
+
+    {% if is_certified %}
+      <div class="fel-badge">FEL CERTIFICADA</div>
+    {% elif is_no_enviar and is_draft %}
+      <div class="fel-badge estado-draft">EN BORRADOR</div>
+    {% elif is_no_enviar %}
+      <div class="fel-badge estado-interno">DOCUMENTO INTERNO</div>
+    {% endif %}
+
+    <div class="invoice-ref">REF: {{ si.name }}</div>
+
+  </div>
+
+</div>
+
+<div class="divider"></div>
+
+{# ============================================================= #}
+{# DATOS DEL CLIENTE                                              #}
+{# ============================================================= #}
+
+<div class="section-title">Datos del Cliente</div>
+
+<div class="client-grid">
+
+  <div class="info-box">
+    <div class="label">Cliente</div>
+    <div class="value">{{ si.bfel_nombre or si.customer_name }}</div>
+  </div>
+
+  <div class="info-box">
+    <div class="label">NIT / CUI</div>
+    <div class="value">{{ si.bfel_nit or si.bfel_cui or 'CF' }}</div>
+  </div>
+
+  <div class="info-box full">
+    <div class="label">Dirección</div>
+    <div class="value">{{ si.bfel_direccion or '' }}</div>
+  </div>
+
+</div>
+
+{# ============================================================= #}
+{# DATOS DE CERTIFICACIÓN FEL - solo si está certificada         #}
+{# ============================================================= #}
+
+{% if is_certified %}
+
+<div class="section-title">Datos de Certificación FEL</div>
+
+<div class="doc-grid">
+
+  <div class="doc-item">
+    <div class="doc-label">Fecha Certificación</div>
+    <div class="doc-value">{{ si.bfel_fechacertificacion or '' }}</div>
+  </div>
+
+  <div class="doc-item">
+    <div class="doc-label">Moneda</div>
+    <div class="doc-value">{{ si.currency }}</div>
+  </div>
+
+  <div class="doc-item">
+    <div class="doc-label">Serie DTE</div>
+    <div class="doc-value">{{ si.bfel_docto_serie or '' }}</div>
+  </div>
+
+  <div class="doc-item">
+    <div class="doc-label">Número DTE</div>
+    <div class="doc-value">{{ si.bfel_docto_no or '' }}</div>
+  </div>
+
+  <div class="doc-item uuid-item">
+    <div class="doc-label">UUID de Autorización SAT</div>
+    <div class="doc-value uuid-value">{{ si.bfel_uuid or '' }}</div>
+  </div>
+
+</div>
+
+{% endif %}
+
+{# ============================================================= #}
+{# DETALLE DE ITEMS                                               #}
+{# ============================================================= #}
+
+<div class="section-title">Detalle {{ bdm.fel_document_type }}</div>
+
+<table class="items-table">
+  <thead>
+    <tr>
+      <th class="qty-col">Cantidad</th>
+      <th>Descripción</th>
+      <th class="money-col">Precio Unitario</th>
+      <th class="money-col">Subtotal</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% set ns = namespace(total=0) %}
+    {% for sii in si.items %}
+      {% set ns.total = ns.total + (sii.amount or 0) %}
+      <tr>
+        <td class="qty-col">{{ sii.qty }}</td>
+        <td>
+          <div class="item-name">{{ sii.item_name }}</div>
+          {% if sii.description and sii.description != sii.item_name %}
+          <div class="item-description">{{ sii.description }}</div>
+          {% endif %}
+        </td>
+        <td class="money-col">{{ frappe.utils.fmt_money(sii.rate, currency=si.currency) }}</td>
+        <td class="money-col">{{ frappe.utils.fmt_money(sii.amount, currency=si.currency) }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{# ============================================================= #}
+{# TOTALES                                                        #}
+{# ============================================================= #}
+
+<div class="total-wrapper">
+  <div class="total-box">
+    <div class="total-label">TOTAL {{ si.currency }}</div>
+    <div class="total-value">{{ frappe.utils.fmt_money(ns.total, currency=si.currency) }}</div>
+  </div>
+</div>
+
+<div class="letters-box">
+  <span class="letters-label">Total en Letras:</span>
+  <span class="letters-value">{{ frappe.utils.money_in_words(ns.total, si.currency) }}</span>
+</div>
+
+{# ============================================================= #}
+{# SECCIÓN QR - solo documentos certificados                     #}
+{# SAT Guatemala: felpub.c.sat.gob.gt/verificador-web/...        #}
+{# ============================================================= #}
+
+{% if is_certified %}
+
+{% set sat_emisor   = (bs.company_nit or '') | replace('-', '') %}
+{% set sat_receptor = (si.bfel_nit or 'CF') | replace('-', '') %}
+{% set sat_monto    = "%.2f"|format(si.grand_total) %}
+{% set sat_url      = 'https://felpub.c.sat.gob.gt/verificador-web/publico/vistas/verificacionDte.jsf?tipo=autorizacion&numero=' + (si.bfel_uuid or '') + '&emisor=' + sat_emisor + '&receptor=' + sat_receptor + '&monto=' + sat_monto %}
+{% set qr_src       = get_qr_base64(sat_url) %}
+
+<div class="qr-section">
+
+  <div class="qr-left">
+    <img
+      src="{{ qr_src }}"
+      class="qr-img"
+      alt="QR Verificación SAT"
+    >
+    <div class="qr-label">Verificar en SAT</div>
+    <div class="qr-sat-domain">felpub.c.sat.gob.gt</div>
+  </div>
+
+  <div class="qr-right">
+
+    <div class="qr-right-title">Documento Certificado Electrónicamente</div>
+
+    <div class="qr-row">
+      <span class="qr-row-label">UUID de Autorización</span>
+      <span class="qr-row-value uuid">{{ si.bfel_uuid or '' }}</span>
+    </div>
+
+    <div class="qr-row">
+      <span class="qr-row-label">Serie DTE</span>
+      <span class="qr-row-value">{{ si.bfel_docto_serie or '' }}</span>
+    </div>
+
+    <div class="qr-row">
+      <span class="qr-row-label">Número DTE</span>
+      <span class="qr-row-value">{{ si.bfel_docto_no or '' }}</span>
+    </div>
+
+    <div class="qr-row">
+      <span class="qr-row-label">Fecha Certificación</span>
+      <span class="qr-row-value">{{ si.bfel_fechacertificacion or '' }}</span>
+    </div>
+
+    <div class="qr-row">
+      <span class="qr-row-label">NIT Emisor</span>
+      <span class="qr-row-value">{{ bs.company_nit }}</span>
+    </div>
+
+    <div class="qr-disclaimer">
+      Escanee el código QR para verificar la autenticidad de este documento
+      en el portal oficial de la SAT Guatemala. Este documento fue generado
+      y certificado electrónicamente conforme al régimen FEL.
+    </div>
+
+  </div>
+
+</div>
+
+{% endif %}
+
+{# ============================================================= #}
+{# AVISOS SEGÚN ESTADO                                            #}
+{# ============================================================= #}
+
+{% if is_no_enviar and is_draft %}
+<div class="notice-draft">
+  ⚠ EN BORRADOR — Este documento no ha sido enviado al sistema FEL.
+  No tiene validez tributaria hasta su certificación.
+</div>
+{% endif %}
+
+{% if is_no_enviar and not is_draft %}
+<div class="notice-interno">
+  Documento interno — Configurado como "No enviar" a FEL.
+  No genera documento tributario electrónico.
+</div>
+{% endif %}
+
+{# ============================================================= #}
+{# NOTAS DEL DOCUMENTO                                            #}
+{# ============================================================= #}
+
+{% if bdm.notes %}
+<div class="notes-box">{{ bdm.notes }}</div>
+{% endif %}
+
+{# ============================================================= #}
+{# FOOTER                                                         #}
+{# ============================================================= #}
+
+<div class="footer">
+  {% if is_certified %}
+  <div>Documento certificado electrónicamente — Régimen FEL — SAT Guatemala</div>
+  {% elif is_no_enviar and is_draft %}
+  <div>Documento en borrador — Pendiente de certificación FEL</div>
+  {% else %}
+  <div>Documento interno — No enviado al sistema FEL</div>
+  {% endif %}
+  <div class="footer-small">Generado desde ERP por Soluciones Integrales CHAPPSA</div>
+</div>
+
+{% endif %}{# fin de bloque principal #}
+
+</body>
+</html>
