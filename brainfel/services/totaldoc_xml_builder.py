@@ -123,7 +123,7 @@ def build_totaldoc_xml(rows: List[Dict[str, Any]], settings=None) -> Dict[str, s
     SubElement(dir_emisor, dte("Pais")).text = norm_country(h.get("Emisor_DireccionEmisor_Pais"))
 
     # RECEPTOR
-    nit_receptor = txt(h.get("Receptor_IDReceptor")).replace("-", "").upper()
+    nit_receptor = txt(h.get("Receptor_IDReceptor")).strip().replace("-", "").upper()
     if not nit_receptor or nit_receptor == "CF":
         nit_receptor = "CF"
         nombre_receptor = "CONSUMIDOR FINAL"
@@ -178,9 +178,9 @@ def build_totaldoc_xml(rows: List[Dict[str, Any]], settings=None) -> Dict[str, s
         if settings and getattr(settings, "isr_regime", None):
             regime = str(settings.isr_regime).lower()
             if "trimestrales" in regime:
-                phrase = "1|2"
-            elif "retencion" in regime or "retención" in regime or "definitiva" in regime or "simplificado" in regime:
                 phrase = "1|1"
+            elif "retencion" in regime or "retención" in regime or "definitiva" in regime or "simplificado" in regime:
+                phrase = "1|2"
             elif "exento" in regime:
                 phrase = "1|3"
         
@@ -312,21 +312,37 @@ def build_totaldoc_xml(rows: List[Dict[str, Any]], settings=None) -> Dict[str, s
             })
             cfc_node = SubElement(comp, cfc("AbonosFacturaCambiaria"), {"Version": "1"})
             
-            idx = 1
-            processed_keys = set()
+            # Recopilar abonos explícitos de las filas
+            abono_list = []
+            seen_abono_keys = set()
             for r in rows:
-                num = txt(r.get("Complementos_AbonosFacturaCambiaria_NumeroAbono"), str(idx))
-                f_venc = txt(r.get("Complementos_AbonosFacturaCambiaria_FechaVencimiento") or h.get("DatosGenerales_FechaHoraEmision") or datetime.now().strftime("%Y-%m-%d"))
-                m_abono = money_totals(r.get("Complementos_AbonosFacturaCambiaria_MontoAbono") or grand_total)
+                venc = r.get("Complementos_AbonosFacturaCambiaria_FechaVencimiento")
+                if venc:
+                    num = txt(r.get("Complementos_AbonosFacturaCambiaria_NumeroAbono") or str(len(abono_list) + 1))
+                    monto = money_totals(r.get("Complementos_AbonosFacturaCambiaria_MontoAbono") or grand_total)
+                    key = f"{num}-{venc}-{monto}"
+                    if key not in seen_abono_keys:
+                        seen_abono_keys.add(key)
+                        abono_list.append({
+                            "NumeroAbono": num,
+                            "FechaVencimiento": venc[:10],
+                            "MontoAbono": monto
+                        })
+            
+            # Si no hay abonos explícitos, crear exactamente uno por defecto por el total
+            if not abono_list:
+                due_date = txt(h.get("due_date") or h.get("posting_date") or h.get("DatosGenerales_FechaHoraEmision") or datetime.now().strftime("%Y-%m-%d"))
+                abono_list.append({
+                    "NumeroAbono": "1",
+                    "FechaVencimiento": due_date[:10],
+                    "MontoAbono": money_totals(grand_total)
+                })
                 
-                key = f"{num}-{f_venc}-{m_abono}"
-                if key not in processed_keys:
-                    abono = SubElement(cfc_node, cfc("Abono"))
-                    SubElement(abono, cfc("NumeroAbono")).text = num
-                    SubElement(abono, cfc("FechaVencimiento")).text = f_venc[:10]
-                    SubElement(abono, cfc("MontoAbono")).text = m_abono
-                    processed_keys.add(key)
-                    idx += 1
+            for a in abono_list:
+                abono = SubElement(cfc_node, cfc("Abono"))
+                SubElement(abono, cfc("NumeroAbono")).text = a["NumeroAbono"]
+                SubElement(abono, cfc("FechaVencimiento")).text = a["FechaVencimiento"]
+                SubElement(abono, cfc("MontoAbono")).text = a["MontoAbono"]
                     
         elif doc_type in ["NCRE", "NDEB"]:
             comp = SubElement(comps, dte("Complemento"), {

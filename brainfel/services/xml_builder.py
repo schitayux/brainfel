@@ -177,7 +177,8 @@ def build_xml_from_dataset(dataset: List[Dict[str, Any]]) -> Dict[str, str]:
     # Frases: si no vienen, usar default 1|1 (como tus XML originales FACT)
     frases_list = _parse_frases(_norm_str(h.get("Frases_Escenarios")))
     if not frases_list:
-        frases_list = [("1", "1")]
+        # frases_list = [("1", "1")]
+        frases_list = [("1", "2")]
 
     frases = SubElement(datos_emision, "dte:Frases")
     for tipo_frase, cod_esc in frases_list:

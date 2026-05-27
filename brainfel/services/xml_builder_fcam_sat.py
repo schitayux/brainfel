@@ -569,23 +569,37 @@ def build_fcam_sat_xml(rows: List[Dict[str, Any]]) -> Dict[str, str]:
         },
     )
 
-    # Intentar obtener múltiples abonos si el dataset los provee
-    processed_abonos = set()
+    # Recopilar abonos explícitos de las filas
+    abono_list = []
+    seen_abono_keys = set()
     for r in rows:
-        num = txt(r.get("Complementos_AbonosFacturaCambiaria_NumeroAbono"), "1")
-        f_venc = txt(r.get("Complementos_AbonosFacturaCambiaria_FechaVencimiento"))
-        if not f_venc: continue
+        venc = r.get("Complementos_AbonosFacturaCambiaria_FechaVencimiento")
+        if venc:
+            num = txt(r.get("Complementos_AbonosFacturaCambiaria_NumeroAbono") or str(len(abono_list) + 1))
+            monto = money(r.get("Complementos_AbonosFacturaCambiaria_MontoAbono") or gran_total)
+            key = f"{num}-{venc}-{monto}"
+            if key not in seen_abono_keys:
+                seen_abono_keys.add(key)
+                abono_list.append({
+                    "NumeroAbono": num,
+                    "FechaVencimiento": venc[:10],
+                    "MontoAbono": monto
+                })
+    
+    # Si no hay abonos explícitos, crear exactamente uno por defecto por el total
+    if not abono_list:
+        due_date = txt(h.get("due_date") or h.get("posting_date") or h.get("DatosGenerales_FechaHoraEmision") or datetime.now().strftime("%Y-%m-%d"))
+        abono_list.append({
+            "NumeroAbono": "1",
+            "FechaVencimiento": due_date[:10],
+            "MontoAbono": money(gran_total)
+        })
         
-        m_abono = money(r.get("Complementos_AbonosFacturaCambiaria_MontoAbono") or gran_total)
-        
-        key = f"{num}-{f_venc}-{m_abono}"
-        if key in processed_abonos: continue
-        processed_abonos.add(key)
-
+    for a in abono_list:
         abono_node = SubElement(abonos, cfc("Abono"))
-        SubElement(abono_node, cfc("NumeroAbono")).text = num
-        SubElement(abono_node, cfc("FechaVencimiento")).text = f_venc[:10]
-        SubElement(abono_node, cfc("MontoAbono")).text = m_abono
+        SubElement(abono_node, cfc("NumeroAbono")).text = a["NumeroAbono"]
+        SubElement(abono_node, cfc("FechaVencimiento")).text = a["FechaVencimiento"]
+        SubElement(abono_node, cfc("MontoAbono")).text = a["MontoAbono"]
 
     # =====================================================
     # ADENDA (Digifact Comercial)

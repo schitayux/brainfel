@@ -509,7 +509,15 @@ body {
 {% else %}
 
 {% set bdm = frappe.get_doc("BFEL Document Map", bdm_list[0].name) %}
-{% set bs  = frappe.get_doc("BFEL Settings",     bdm.bfel_settings) %}
+{% set bs_list = frappe.get_all("BFEL Settings", filters={"company": doc.company, "enabled": 1}, limit=1) %}
+{% if not bs_list %}
+  {% set bs_list = frappe.get_all("BFEL Settings", filters={"enabled": 1}, limit=1) %}
+{% endif %}
+{% if bs_list %}
+  {% set bs = frappe.get_doc("BFEL Settings", bs_list[0].name) %}
+{% else %}
+  {% set bs = frappe.get_doc("BFEL Settings", bdm.bfel_settings) %}
+{% endif %}
 
 {# ============================================================= #}
 {# WATERMARKS                                                     #}

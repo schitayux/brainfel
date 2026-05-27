@@ -353,22 +353,37 @@ def build_fact_cf(rows: List[Dict[str, Any]]) -> Dict[str, str]:
         # Usamos AditionalData con una sola 'd' como pide Digifact NUC
         comp_data_node = SubElement(comp_ai, "AditionalData")
         
-        idx = 1
-        processed_keys = set()
+        # Recopilar abonos explícitos de las filas
+        abono_list = []
+        seen_abono_keys = set()
         for r in rows:
-            num = txt(r.get("Complementos_AbonosFacturaCambiaria_NumeroAbono"), str(idx))
-            f_venc = txt(r.get("Complementos_AbonosFacturaCambiaria_FechaVencimiento") or h.get("DatosGenerales_FechaHoraEmision") or datetime.now().strftime("%Y-%m-%d"))
-            m_abono = money(r.get("Complementos_AbonosFacturaCambiaria_MontoAbono") or grand_total)
+            venc = r.get("Complementos_AbonosFacturaCambiaria_FechaVencimiento")
+            if venc:
+                num = txt(r.get("Complementos_AbonosFacturaCambiaria_NumeroAbono") or str(len(abono_list) + 1))
+                monto = money(r.get("Complementos_AbonosFacturaCambiaria_MontoAbono") or grand_total)
+                key = f"{num}-{venc}-{monto}"
+                if key not in seen_abono_keys:
+                    seen_abono_keys.add(key)
+                    abono_list.append({
+                        "NumeroAbono": num,
+                        "FechaVencimiento": venc[:10],
+                        "MontoAbono": monto
+                    })
+        
+        # Si no hay abonos explícitos, crear exactamente uno por defecto por el total
+        if not abono_list:
+            due_date = txt(h.get("due_date") or h.get("posting_date") or h.get("DatosGenerales_FechaHoraEmision") or datetime.now().strftime("%Y-%m-%d"))
+            abono_list.append({
+                "NumeroAbono": "1",
+                "FechaVencimiento": due_date[:10],
+                "MontoAbono": money(grand_total)
+            })
             
-            key = f"{num}-{f_venc}-{m_abono}"
-            if key not in processed_keys:
-                data_node = SubElement(comp_data_node, "Data")
-                SubElement(data_node, "Info", {"Name": "NumeroAbono", "Value": num})
-                SubElement(data_node, "Info", {"Name": "FechaVencimiento", "Value": f_venc[:10]})
-                SubElement(data_node, "Info", {"Name": "MontoAbono", "Value": m_abono})
-                
-                processed_keys.add(key)
-                idx += 1
+        for a in abono_list:
+            data_node = SubElement(comp_data_node, "Data")
+            SubElement(data_node, "Info", {"Name": "NumeroAbono", "Value": a["NumeroAbono"]})
+            SubElement(data_node, "Info", {"Name": "FechaVencimiento", "Value": a["FechaVencimiento"]})
+            SubElement(data_node, "Info", {"Name": "MontoAbono", "Value": a["MontoAbono"]})
 
     if doc_type in ["NCRE", "NDEB"]:
         # NCRE/NDEB Complement - Reference to original document
