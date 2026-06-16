@@ -40,6 +40,14 @@ def build_totaldoc_xml(rows: List[Dict[str, Any]], settings=None) -> Dict[str, s
 
     doc_type = txt(h.get("DatosGenerales_Tipo") or h.get("TipoDocumento") or "FACT")
     is_export = str(h.get("bfel_es_exportacion")).strip() == "1"
+    
+    afiliacion = txt(h.get("Emisor_AfiliacionIVA"), "GEN")
+    is_pequeno = False
+    if settings and getattr(settings, "pequeño_contribuyente", 0):
+        is_pequeno = True
+    elif afiliacion.upper() == "PEQ" or doc_type == "FPEQ":
+        is_pequeno = True
+
     frases_raw = txt(h.get("Frases_Escenarios"))
     if frases_raw and "4|1" in frases_raw:
         is_export = True
@@ -163,6 +171,7 @@ def build_totaldoc_xml(rows: List[Dict[str, Any]], settings=None) -> Dict[str, s
         else:
             tf, sc = "1", p_str.strip()
         if tf == "1" and sc == "44": return
+        if sc == "0" or not sc: return
         pair_key = f"{tf}|{sc}"
         if pair_key in seen_phrases: return
         final_phrases.append((tf, sc))
@@ -171,9 +180,13 @@ def build_totaldoc_xml(rows: List[Dict[str, Any]], settings=None) -> Dict[str, s
     if frases_raw:
         for p in frases_raw.replace(";", ",").split(","):
             add_phrase(p)
+            
+    # 1b. If the emisor is a small taxpayer (Es Pequeño Contribuyente), add Type 3 Scenario 1
+    if is_pequeno:
+        add_phrase("3|1")
     
     has_type_1 = any(f[0] == "1" for f in final_phrases)
-    if not has_type_1:
+    if not has_type_1 and not is_pequeno:
         phrase = None
         if settings and getattr(settings, "isr_regime", None):
             regime = str(settings.isr_regime).lower()
@@ -245,30 +258,32 @@ def build_totaldoc_xml(rows: List[Dict[str, Any]], settings=None) -> Dict[str, s
         if not tax_code: tax_code = "2" if is_export else "1"
         if taxable == 0: taxable = (float(r.get("Items_Cantidad", 1)) * float(r.get("Items_PrecioUnitario", 0))) - discount_val
             
-        impuestos = SubElement(item, dte("Impuestos"))
-        impuesto = SubElement(impuestos, dte("Impuesto"))
-        SubElement(impuesto, dte("NombreCorto")).text = "IVA"
-        SubElement(impuesto, dte("CodigoUnidadGravable")).text = tax_code
-        SubElement(impuesto, dte("MontoGravable")).text = money(taxable)
-        SubElement(impuesto, dte("MontoImpuesto")).text = money(tax)
+        if not is_pequeno:
+            impuestos = SubElement(item, dte("Impuestos"))
+            impuesto = SubElement(impuestos, dte("Impuesto"))
+            SubElement(impuesto, dte("NombreCorto")).text = "IVA"
+            SubElement(impuesto, dte("CodigoUnidadGravable")).text = tax_code
+            SubElement(impuesto, dte("MontoGravable")).text = money(taxable)
+            SubElement(impuesto, dte("MontoImpuesto")).text = money(tax)
 
-        if tax_code not in taxes_summary: taxes_summary[tax_code] = 0.0
-        taxes_summary[tax_code] += tax
+            if tax_code not in taxes_summary: taxes_summary[tax_code] = 0.0
+            taxes_summary[tax_code] += tax
 
         SubElement(item, dte("Total")).text = money(line_total)
 
     # TOTALES
     rt = SubElement(datos_emision, dte("Totales"))
-    tt = SubElement(rt, dte("TotalImpuestos"))
-    if not taxes_summary:
-        default_code = "2" if is_export else "1"
-        taxes_summary[default_code] = 0.0
+    if not is_pequeno:
+        tt = SubElement(rt, dte("TotalImpuestos"))
+        if not taxes_summary:
+            default_code = "2" if is_export else "1"
+            taxes_summary[default_code] = 0.0
 
-    for code, amount in taxes_summary.items():
-        tax_node = SubElement(tt, dte("TotalImpuesto"), {
-            "NombreCorto": "IVA",
-            "TotalMontoImpuesto": money_totals(amount)
-        })
+        for code, amount in taxes_summary.items():
+            tax_node = SubElement(tt, dte("TotalImpuesto"), {
+                "NombreCorto": "IVA",
+                "TotalMontoImpuesto": money_totals(amount)
+            })
 
     SubElement(rt, dte("GranTotal")).text = money_totals(grand_total)
 

@@ -5,7 +5,7 @@ from xml.etree.ElementTree import Element, SubElement, tostring
 from datetime import datetime
 import re
 
-def build_fact_cf(rows: List[Dict[str, Any]]) -> Dict[str, str]:
+def build_fact_cf(rows: List[Dict[str, Any]], settings: Any = None) -> Dict[str, str]:
     if not rows:
         raise ValueError("Dataset vacío")
 
@@ -23,6 +23,14 @@ def build_fact_cf(rows: List[Dict[str, Any]]) -> Dict[str, str]:
     doc_type = txt(h.get("DatosGenerales_Tipo") or h.get("TipoDocumento") or "FACT")
     # SQL views might return 1 as int or '1' as string
     is_export = str(h.get("bfel_es_exportacion")).strip() == "1"
+    
+    afiliacion = txt(h.get("Emisor_AfiliacionIVA", "GEN"))
+    
+    is_pequeno = False
+    if settings and getattr(settings, "pequeño_contribuyente", 0):
+        is_pequeno = True
+    elif afiliacion.upper() == "PEQ" or doc_type == "FPEQ":
+        is_pequeno = True
     
     frases_raw = txt(h.get("Frases_Escenarios"))
     # If the user sends 4|1 in the phrase field, it's an export even if bfel_es_exportacion is missing
@@ -118,7 +126,13 @@ def build_fact_cf(rows: List[Dict[str, Any]]) -> Dict[str, str]:
             
         # Ignore invalid scenarios that the SQL view might be sending by mistake
         # Scenario 44 is not valid for Type 1 and conflicts with the correct 1|2 phrase
+        # Ignore invalid scenarios that the SQL view might be sending by mistake
+        # Scenario 44 is not valid for Type 1 and conflicts with the correct 1|2 phrase
         if tf == "1" and sc == "44":
+            return
+            
+        # Ignore scenario 0 or empty to prevent XSD validation errors
+        if sc == "0" or not sc:
             return
             
         # Deduplicate based on final (tf, sc) pair
@@ -133,6 +147,10 @@ def build_fact_cf(rows: List[Dict[str, Any]]) -> Dict[str, str]:
     if frases_raw:
         for p in frases_raw.replace(";", ",").split(","):
             add_phrase(p)
+            
+    # 1b. If the emisor is a small taxpayer (Es Pequeño Contribuyente), add Type 3 Scenario 1
+    if is_pequeno:
+        add_phrase("3|1")
     
     # 2. Ensure Type 1 (ISR/Exento) exists if needed. 
     # Defaulting to 1|2 (ISR Retención) as it is required for ISR OPC issuers 
@@ -140,7 +158,7 @@ def build_fact_cf(rows: List[Dict[str, Any]]) -> Dict[str, str]:
     # FCAM ALWAYS requires a Type 1 phrase, regardless of whether it is an export or not.
     has_type_1 = any(f[0] == "1" for f in final_phrases)
     
-    if not has_type_1:
+    if not has_type_1 and not is_pequeno:
         if doc_type == "FCAM":
             add_phrase("1|2")
         elif not is_export and afiliacion.upper() == "GEN":
@@ -262,26 +280,27 @@ def build_fact_cf(rows: List[Dict[str, Any]]) -> Dict[str, str]:
 
         grand_total += line_total
 
-        taxes = SubElement(item, "Taxes")
-        t = SubElement(taxes, "Tax")
-        # Respect the dataset's tax code (e.g., 2 for Exempt). 
-        # Only fall back to defaults if not provided.
-        tax_code = txt(r.get("Items_IVA_CodigoUnidadGravable"))
-        if not tax_code:
-            tax_code = "2" if is_export else "1"
-            
-        if taxable == 0:
-            taxable = (float(r.get("Items_Cantidad", 1)) * float(r.get("Items_PrecioUnitario", 0))) - discount_val
-            
-        SubElement(t, "Code").text = tax_code
-        SubElement(t, "Description").text = "IVA"
-        SubElement(t, "TaxableAmount").text = money(taxable)
-        SubElement(t, "Amount").text = f"{tax:.2f}"
+        if not is_pequeno:
+            taxes = SubElement(item, "Taxes")
+            t = SubElement(taxes, "Tax")
+            # Respect the dataset's tax code (e.g., 2 for Exempt). 
+            # Only fall back to defaults if not provided.
+            tax_code = txt(r.get("Items_IVA_CodigoUnidadGravable"))
+            if not tax_code:
+                tax_code = "2" if is_export else "1"
+                
+            if taxable == 0:
+                taxable = (float(r.get("Items_Cantidad", 1)) * float(r.get("Items_PrecioUnitario", 0))) - discount_val
+                
+            SubElement(t, "Code").text = tax_code
+            SubElement(t, "Description").text = "IVA"
+            SubElement(t, "TaxableAmount").text = money(taxable)
+            SubElement(t, "Amount").text = f"{tax:.2f}"
 
-        # Track for footer
-        if tax_code not in taxes_summary:
-            taxes_summary[tax_code] = 0.0
-        taxes_summary[tax_code] += tax
+            # Track for footer
+            if tax_code not in taxes_summary:
+                taxes_summary[tax_code] = 0.0
+            taxes_summary[tax_code] += tax
 
         it = SubElement(item, "Totals")
         SubElement(it, "TotalItem").text = money(line_total)
@@ -291,21 +310,21 @@ def build_fact_cf(rows: List[Dict[str, Any]]) -> Dict[str, str]:
     # =================================================
     rt = SubElement(root, "Totals")
 
-    # Always include TotalTaxes, even if 0, for Exempt/Export validation (Error 5004)
-    tt = SubElement(rt, "TotalTaxes")
-    
-    # If no taxes recorded (exempt), ensure at least one TotalTax node exists
-    if not taxes_summary:
-        default_code = "2" if is_export else "1"
-        taxes_summary[default_code] = 0.0
+    if not is_pequeno:
+        tt = SubElement(rt, "TotalTaxes")
+        
+        # If no taxes recorded (exempt), ensure at least one TotalTax node exists
+        if not taxes_summary:
+            default_code = "2" if is_export else "1"
+            taxes_summary[default_code] = 0.0
 
-    for code, amount in taxes_summary.items():
-        tax_node = SubElement(tt, "TotalTax")
-        # Removing Code node from footer to match working export XMLs
-        # SubElement(tax_node, "Code").text = code
-        SubElement(tax_node, "Description").text = "IVA"
-        # Digifact suele requerir exactamente 2 decimales en los totales de impuestos
-        SubElement(tax_node, "Amount").text = f"{amount:.2f}"
+        for code, amount in taxes_summary.items():
+            tax_node = SubElement(tt, "TotalTax")
+            # Removing Code node from footer to match working export XMLs
+            # SubElement(tax_node, "Code").text = code
+            SubElement(tax_node, "Description").text = "IVA"
+            # Digifact suele requerir exactamente 2 decimales en los totales de impuestos
+            SubElement(tax_node, "Amount").text = f"{amount:.2f}"
 
     gt = SubElement(rt, "GrandTotal")
     SubElement(gt, "InvoiceTotal").text = money(grand_total)

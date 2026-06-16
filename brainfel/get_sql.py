@@ -1,10 +1,12 @@
 import frappe
 
 def execute():
-    settings = frappe.get_all("BFEL Settings", fields=["name", "sql_func_certificar"])
+    settings = frappe.get_all("BFEL Settings", fields=["name", "sql_func_certificar", "company", "enabled"])
     for s in settings:
+        if not s.enabled:
+            continue
         func = s.sql_func_certificar
-        print(f"Settings: {s.name}, Func: {func}")
+        print(f"Settings: {s.name} (Company: {s.company}), Func: {func}")
         try:
             res = frappe.db.sql(f"SHOW CREATE VIEW {func}", as_dict=True)
             print(res[0].get("Create View") or res[0])

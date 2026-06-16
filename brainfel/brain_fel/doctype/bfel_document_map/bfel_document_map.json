@@ -59,7 +59,7 @@
             "fieldname": "type_docdte",
             "fieldtype": "Select",
             "label": "Tipo DTE",
-            "options": "FACT\nFCAM\nFESP\nNABN\nNDEB\nNCRE"
+            "options": "FACT\nFCAM\nFESP\nNABN\nNDEB\nNCRE\nFPEQ\nFCAP"
         },
         {
             "fieldname": "establecimiento",

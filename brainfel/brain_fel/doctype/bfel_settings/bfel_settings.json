@@ -20,6 +20,8 @@
   "datos_empresa_tab",
   "company",
   "company_nit",
+  "pequeño_contribuyente",
+  "regimen_iva",
   "isr_regime",
   "is_agent_retainer",
   "correoemisor",
@@ -142,6 +144,19 @@
    "fieldname": "company_nit",
    "fieldtype": "Data",
    "label": "Company NIT"
+  },
+  {
+   "default": "0",
+   "fieldname": "pequeño_contribuyente",
+   "fieldtype": "Check",
+   "label": "Es Pequeño Contribuyente"
+  },
+  {
+   "default": "GEN",
+   "fieldname": "regimen_iva",
+   "fieldtype": "Select",
+   "label": "Regimen IVA",
+   "options": "GEN\nPEQ"
   },
   {
    "fieldname": "isr_regime",

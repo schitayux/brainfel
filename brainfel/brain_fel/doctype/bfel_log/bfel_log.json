@@ -18,6 +18,7 @@
   "http_status",
   "elapsed_ms",
   "created_by",
+  "bfel_settings",
   "certifier",
   "environment",
   "responsedata",
@@ -91,6 +92,12 @@
    "fieldtype": "Link",
    "label": "created_by",
    "options": "User"
+  },
+  {
+   "fieldname": "bfel_settings",
+   "fieldtype": "Link",
+   "label": "BFEL Settings",
+   "options": "BFEL Settings"
   },
   {
    "fieldname": "certifier",

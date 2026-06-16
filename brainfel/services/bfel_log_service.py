@@ -105,6 +105,7 @@ def create_bfel_log(
     # Contexto BFEL Settings
     # ------------------------------------------------------------------
     if settings:
+        log.bfel_settings = settings.name
         log.certifier = getattr(settings, "certifier", None) or "Digifact"
         log.environment = _map_environment(settings)
         log.responsedata = getattr(settings, "responsedata", None)

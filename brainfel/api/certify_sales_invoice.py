@@ -9,8 +9,10 @@ from brainfel.services.xml_builder_fact_cf import build_fact_cf as build_xml_fro
 from brainfel.services.xml_builder_fcam_sat import build_fcam_sat_xml
 from brainfel.services.token_service import get_digifact_token
 from brainfel.services.digifact_client import certify_xml as digifact_certify_xml, cancel_fel_document as digifact_cancel_fel_document
+from brainfel.services.totaldoc_client import certify_xml as totaldoc_certify_xml, cancel_fel_document as totaldoc_cancel_fel_document
 from brainfel.services import totaldoc_client
 from brainfel.services.bfel_log_service import create_bfel_log
+from brainfel.utils.company_utils import validate_user_company_access, get_bfel_settings_for_document
 
 @frappe.whitelist()
 def debug_last_log():
@@ -50,16 +52,6 @@ def _db_set_if_exists(doc, fieldname: str, value):
     if doc.meta.has_field(fieldname):
         doc.db_set(fieldname, value)
 
-
-def _load_settings_for_company(company: str):
-    row = frappe.get_all(
-        "BFEL Settings",
-        filters={"company": company, "enabled": 1},
-        limit=1,
-    )
-    if not row:
-        frappe.throw(f"No existe BFEL Settings activo para la empresa {company}")
-    return frappe.get_doc("BFEL Settings", row[0].name)
 
 
 def _get_certification_datetime(response):
@@ -106,7 +98,8 @@ def certify_sales_invoice(sales_invoice_name: str, force_test_mode: int = 0, mot
     if getattr(si, "bfel_uuid", None):
         frappe.throw("Este documento ya fue certificado FEL (bfel_uuid existe).")
 
-    settings = _load_settings_for_company(si.company)
+    validate_user_company_access(si.company)
+    settings = get_bfel_settings_for_document(si)
     test_mode = bool(force_test_mode) or (getattr(settings, "test_mode", "N") == "Y")
 
     # ------------------------------------------------------------------
@@ -152,7 +145,7 @@ def certify_sales_invoice(sales_invoice_name: str, force_test_mode: int = 0, mot
         from brainfel.services.totaldoc_xml_builder import build_totaldoc_xml
         xml_info = build_totaldoc_xml(dataset, settings)
     else:
-        xml_info = build_xml_from_dataset(dataset)
+        xml_info = build_xml_from_dataset(dataset, settings)
         
     xml_payload = (xml_info or {}).get("xml") or ""
 
@@ -340,7 +333,8 @@ def cancel_sales_invoice_fel(sales_invoice_name: str, motivo_anulacion: str, for
         # Ya está anulado en FEL (quizás falló la anulación en ERPNext antes)
         return {"success": True, "message": "Ya estaba anulado en FEL."}
 
-    settings = _load_settings_for_company(si.company)
+    validate_user_company_access(si.company)
+    settings = get_bfel_settings_for_document(si)
     test_mode = bool(force_test_mode) or (getattr(settings, "test_mode", "N") == "Y")
     
     # ------------------------------------------------------------------
