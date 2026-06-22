@@ -250,8 +250,8 @@ def certify_sales_invoice(sales_invoice_name: str, force_test_mode: int = 0, mot
     si.flags.ignore_validate_update_after_submit = True
 
     _db_set_if_exists(si, "bfel_uuid", response.get("uuid"))
-    _db_set_if_exists(si, "bfel_docto_serie", response.get("numero"))
-    _db_set_if_exists(si, "bfel_docto_no", response.get("serie"))
+    _db_set_if_exists(si, "bfel_docto_serie", response.get("serie"))
+    _db_set_if_exists(si, "bfel_docto_no", response.get("numero"))
     _db_set_if_exists(si, "bfel_numero_acceso", response.get("numero_acceso"))
     _db_set_if_exists(si, "bfel_request_id", response.get("request_id"))
 
