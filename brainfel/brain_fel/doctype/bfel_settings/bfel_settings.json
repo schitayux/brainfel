@@ -46,6 +46,7 @@
   "url_registrar",
   "url_verificar",
   "url_retorna_cliente",
+  "url_retorna_cui",
   "url_anular",
   "url_ncred",
   "url_firma",
@@ -109,6 +110,11 @@
    "fieldname": "url_retorna_cliente",
    "fieldtype": "Data",
    "label": "URL Retorna Cliente"
+  },
+  {
+   "fieldname": "url_retorna_cui",
+   "fieldtype": "Data",
+   "label": "URL Retorna CUI"
   },
   {
    "fieldname": "url_anular",

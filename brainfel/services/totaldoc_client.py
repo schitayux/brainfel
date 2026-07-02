@@ -295,3 +295,81 @@ def cancel_fel_document(settings, test_mode: bool, doc_uuid: str, buyer_nit: str
         "message": msg,
         "request_payload": cert_payload
     }
+
+
+def _consultar_identificacion(settings, url_field: str, identificacion: str):
+    """
+    Consulta el nombre registrado de un cliente por NIT o CUI vía Total Doc (Grupo CDS).
+
+    Endpoint real (doc. Total Doc), igual para ambos identificadores, solo cambia
+    la URL base configurada en BFEL Settings (url_retorna_cliente para NIT,
+    url_retorna_cui para CUI):
+        GET {url_base}{identificacion}   (ej. https://info.totaldoc.io/api/nit/33491232)
+        Headers: appKey
+        Sin body.
+        200 -> {"nit"/"cui": "...", "name": "...", "address": "...", "message": "OK"}
+        404/401 -> {"code": ..., "message": "...", "detail": "...", "detailCode": "..."}
+
+    Retorna:
+        {
+            "success": bool,
+            "customer_name": str | None,
+            "http_status": int,
+            "raw": dict,
+            "message": str,
+        }
+    """
+    start = time.time()
+
+    url_base = (getattr(settings, url_field, None) or "").strip()
+    if not url_base:
+        raise Exception(f"BFEL Settings: {url_field} no está configurada.")
+
+    api_key = _get_api_key(settings)
+    id_normalizado = _nit_12(identificacion)
+
+    if not id_normalizado:
+        raise Exception("Debe indicar un valor de identificación para consultar el cliente.")
+
+    url = f"{url_base}{id_normalizado}"
+    headers = {
+        "appKey": api_key,
+        "Accept": "application/json",
+    }
+
+    r = requests.get(url, headers=headers, timeout=30)
+
+    try:
+        raw = r.json()
+    except Exception:
+        raw = {}
+
+    elapsed_ms = int((time.time() - start) * 1000)
+    success = r.status_code == 200
+
+    customer_name = raw.get("name") if success and isinstance(raw, dict) else None
+
+    msg = ""
+    if isinstance(raw, dict):
+        msg = raw.get("detail") or raw.get("message") or ""
+    if not success and not msg:
+        msg = r.text or "Error al consultar cliente por identificación."
+
+    return {
+        "success": success and bool(customer_name),
+        "customer_name": customer_name,
+        "http_status": r.status_code,
+        "elapsed_ms": elapsed_ms,
+        "raw": raw,
+        "message": msg,
+    }
+
+
+def consultar_cliente(settings, nit: str):
+    """Consulta por NIT vía BFEL Settings.url_retorna_cliente."""
+    return _consultar_identificacion(settings, "url_retorna_cliente", nit)
+
+
+def consultar_cliente_cui(settings, cui: str):
+    """Consulta por CUI vía BFEL Settings.url_retorna_cui."""
+    return _consultar_identificacion(settings, "url_retorna_cui", cui)

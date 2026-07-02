@@ -117,6 +117,16 @@ def certify_sales_invoice(sales_invoice_name: str, force_test_mode: int = 0, mot
         for row in dataset:
             row["MotivoAjuste"] = motivo_ajuste
 
+    # Enriquecer Items_Descripcion con descripcion_2 para ítems con adenda
+    # La vista SQL sólo trae item_name; descripcion_2 concatena los datos DIGECAM requeridos
+    if dataset:
+        si_items_by_idx = {str(item.idx): item for item in si.items}
+        for row in dataset:
+            linea = str(row.get("Items_NumeroLinea", "")).strip()
+            si_item = si_items_by_idx.get(linea)
+            if si_item and getattr(si_item, "tiene_adenda", 0) and getattr(si_item, "descripcion_2", ""):
+                row["Items_Descripcion"] = si_item.descripcion_2
+
     if not dataset:
         msg = "La vista/función SQL no retornó datos v1."
 
@@ -146,8 +156,14 @@ def certify_sales_invoice(sales_invoice_name: str, force_test_mode: int = 0, mot
         xml_info = build_totaldoc_xml(dataset, settings)
     else:
         xml_info = build_xml_from_dataset(dataset, settings)
-        
+
     xml_payload = (xml_info or {}).get("xml") or ""
+
+    if settings.certifier == "Grupo CDS" and xml_payload.strip():
+        from brainfel.services.adenda_builder import build_adenda
+        adenda_xml = build_adenda(si, si.company)
+        if adenda_xml:
+            xml_payload = xml_payload.replace("</dte:DTE>", f"</dte:DTE>\n\t\t\t{adenda_xml}", 1)
 
     if not xml_payload.strip():
         msg = "No se generó XML (payload vacío)."

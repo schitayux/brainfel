@@ -1,0 +1,77 @@
+{
+ "actions": [],
+ "creation": "2026-06-26 00:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "istable": 1,
+ "field_order": [
+  "grupo_articulo",
+  "tag_xml",
+  "campo_erpnext",
+  "fuente",
+  "orden",
+  "activo"
+ ],
+ "fields": [
+  {
+   "fieldname": "grupo_articulo",
+   "fieldtype": "Link",
+   "label": "Grupo Artículo",
+   "options": "Item Group",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "tag_xml",
+   "fieldtype": "Data",
+   "label": "Tag XML",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "campo_erpnext",
+   "fieldtype": "Data",
+   "label": "Campo ERPNext",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "default": "Item",
+   "fieldname": "fuente",
+   "fieldtype": "Select",
+   "label": "Fuente",
+   "options": "Item\nFactura",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "orden",
+   "fieldtype": "Int",
+   "label": "Orden"
+  },
+  {
+   "default": "1",
+   "fieldname": "activo",
+   "fieldtype": "Check",
+   "label": "Activo",
+   "in_list_view": 1,
+   "columns": 1
+  }
+ ],
+ "links": [],
+ "modified": "2026-06-26 00:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Brain FEL",
+ "name": "BFEL Adenda Row",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

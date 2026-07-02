@@ -52,3 +52,20 @@ def get_bfel_settings_for_document(doc):
         frappe.throw(f"Existe más de un BFEL Settings activo para la compañía {doc.company}. Corrija la configuración.")
         
     return frappe.get_doc("BFEL Settings", rows[0].name)
+
+
+def get_bfel_settings_for_company_safe(company):
+    """
+    Retorna la configuración BFEL activa para la compañía indicada, o None si no existe.
+    No lanza excepción (safe variant de get_bfel_settings_for_document).
+    """
+    if not company:
+        return None
+    rows = frappe.get_all(
+        "BFEL Settings",
+        filters={"company": company, "enabled": 1},
+        fields=["name"]
+    )
+    if not rows or len(rows) > 1:
+        return None
+    return frappe.get_doc("BFEL Settings", rows[0].name)

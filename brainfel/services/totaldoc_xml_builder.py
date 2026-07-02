@@ -381,10 +381,6 @@ def build_totaldoc_xml(rows: List[Dict[str, Any]], settings=None) -> Dict[str, s
                 "MotivoAjuste": val_motivo
             })
 
-    # ADENDA
-    adenda = SubElement(sat, dte("Adenda"))
-    SubElement(adenda, "Adenda1").text = txt(h.get("name") or "Adenda Info")
-
     xml_body = tostring(root, encoding="unicode", method="xml")
     xml = '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\n' + xml_body
 
