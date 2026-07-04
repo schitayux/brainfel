@@ -325,7 +325,10 @@ def _consultar_identificacion(settings, url_field: str, identificacion: str):
     if not url_base:
         raise Exception(f"BFEL Settings: {url_field} no está configurada.")
 
-    api_key = _get_api_key(settings)
+    api_key = (settings.get_password("appkey", raise_exception=False) or "").strip()
+    if not api_key:
+        raise Exception("BFEL Settings: el AppKey (Consulta NIT/CUI) no está configurado.")
+
     id_normalizado = _nit_12(identificacion)
 
     if not id_normalizado:

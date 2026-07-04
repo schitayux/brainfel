@@ -10,6 +10,7 @@
   "certifier",
   "user",
   "contraseña_certificador",
+  "appkey",
   "timeout_ms",
   "test_mode",
   "generate_xml",
@@ -275,6 +276,12 @@
    "fieldname": "contraseña_certificador",
    "fieldtype": "Data",
    "label": "contraseña certificador"
+  },
+  {
+   "description": "AppKey para consulta de Nombre por NIT/CUI (Total Doc / Grupo CDS, url_retorna_cliente y url_retorna_cui). Distinta de la contraseña del certificador.",
+   "fieldname": "appkey",
+   "fieldtype": "Password",
+   "label": "AppKey (Consulta NIT/CUI)"
   },
   {
    "fieldname": "certifier",
